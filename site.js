@@ -91,11 +91,16 @@
 	};
 
 	const initPortfolioSwiper = () => {
-		const el = document.querySelector('.portfolio-swiper');
-		if (!el || typeof Swiper === 'undefined') return;
+		const group = document.querySelector('.portfolio-swiper-group');
+		const el = group?.querySelector('.portfolio-swiper');
+		const pagination = group?.querySelector('.portfolio-swiper__pagination');
+		const prev = el?.querySelector('.swiper-button-prev');
+		const next = el?.querySelector('.swiper-button-next');
+
+		if (!el || !pagination || !prev || !next || typeof Swiper === 'undefined') return;
 
 		new Swiper(el, {
-			slidesPerView: 1,
+			slidesPerView: 'auto',
 			spaceBetween: 24,
 			loop: true,
 			grabCursor: true,
@@ -105,17 +110,12 @@
 				pauseOnMouseEnter: true,
 			},
 			pagination: {
-				el: '.swiper-pagination',
+				el: pagination,
 				clickable: true,
 			},
 			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev',
-			},
-			breakpoints: {
-				640: { slidesPerView: 1.15 },
-				960: { slidesPerView: 2 },
-				1280: { slidesPerView: 2.2 },
+				nextEl: next,
+				prevEl: prev,
 			},
 		});
 	};
