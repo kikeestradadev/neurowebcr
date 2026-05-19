@@ -107,6 +107,55 @@ npm run deploy       # sube la carpeta public/ tal como está (sin compilar)
 npm run deploy:full  # opcional: npm run build + deploy (sin Prepros)
 ```
 
+## Dev Environment (XAMPP localhost)
+
+Ruta local esperada:
+
+```bash
+/Applications/XAMPP/xamppfiles/htdocs/neurowebcr
+```
+
+### Build local
+
+```bash
+npm run build
+```
+
+Resultado esperado:
+
+- `public/index.html`
+- `public/en/index.html`
+- `public/tailwind-dist.css`
+
+Notas:
+
+- Warnings de Sass (`@import`, `type-of`, `map-get`) y Node (`MODULE_TYPELESS_PACKAGE_JSON`) pueden aparecer.
+- Esos warnings **no bloquean** el build actual ni el deploy.
+
+### URL local
+
+- `http://localhost/neurowebcr` puede mostrar listado de carpeta (según Apache).
+- URL funcional de la landing en este setup: `http://localhost/neurowebcr/public/`
+- Inglés: `http://localhost/neurowebcr/public/en/`
+
+## Deploy a Producción (cPanel / Apache)
+
+Para `https://neurowebcr.com/`, usar solo el contenido generado en `public/`.
+
+1. Compilar local:
+
+```bash
+npm install
+npm run build
+```
+
+2. En cPanel (`File Manager`), abrir la carpeta raíz del dominio (`public_html` o la asignada a `neurowebcr.com`).
+3. Subir el **contenido de `public/`** directamente a esa raíz (no la carpeta `public`, sino lo que está dentro).
+4. Verificar que existan en raíz: `index.html`, `en/`, `tailwind-dist.css`, `site.js`, `images/`.
+5. Probar:
+   - `https://neurowebcr.com/`
+   - `https://neurowebcr.com/en/`
+
 ## GitHub Pages (deploy con Prepros)
 
 **No hay un “build” del proyecto en el repo.** Lo que se publica es la carpeta **`public/`** después de que Prepros (y, si aplica, `build:pug`) hayan generado ahí el HTML y el CSS.
