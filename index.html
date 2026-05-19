@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es" prefix="og: http://ogp.me/ns#" data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Desarrollo web, AI Agents, automatización y soluciones digitales inteligentes. Creamos experiencias digitales que impulsan tu negocio.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="light dark">
+    <meta property="og:title" content="NeuroWebCR">
+    <meta property="og:description" content="Desarrollo web, AI Agents, automatización y soluciones digitales inteligentes. Creamos experiencias digitales que impulsan tu negocio.">
+    <meta property="og:type" content="website">
+    <link rel="alternate" hreflang="es" href="./">
+    <link rel="alternate" hreflang="en" href="./en/">
+    <link rel="alternate" hreflang="x-default" href="./">
+    <link rel="icon" href="./images/ico.png" type="image/png">
+    <link rel="shortcut icon" href="./images/ico.png" type="image/png">
+    <link rel="apple-touch-icon" href="./images/ico.png">
+    <script>!(function(){try{var t=localStorage.getItem('nw-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','light')}})();</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./tailwind-dist.css">
+    <title>NeuroWebCR | Soluciones Digitales Inteligentes</title>
+  </head>
+  <body class="home bg-nw-bg text-nw-text flex flex-col min-h-screen pt-[var(--header-height)] antialiased" itemscope itemtype="http://schema.org/WebPage">
+    <header class="site-header fixed top-0 left-0 right-0 w-full z-[1000] backdrop-blur-md border-b shadow-sm">
+      <div class="main-container">
+        <div class="flex items-center justify-between h-[var(--header-height)] gap-4"><a class="logo" href="#inicio" aria-label="NeuroWebCR - Inicio"><img class="logo__img logo__img--light" src="./images/logo_w_h.png" alt="NeuroWebCR" width="892" height="138" decoding="async"/><img class="logo__img logo__img--dark" src="./images/logo_b_h.png" alt="" width="886" height="132" decoding="async" aria-hidden="true"/></a>
+          <nav class="hidden l:flex items-center gap-6 xl:gap-8" aria-label="Navegación principal"><a class="nav-link" href="#inicio">Inicio</a><a class="nav-link" href="#servicios">Servicios</a><a class="nav-link" href="#portafolio">Portafolio</a><a class="nav-link" href="#contacto">Contacto</a></nav>
+          <div class="flex items-center gap-2 shrink-0">
+            <nav class="lang-switcher" aria-label="Idioma"><a class="lang-switcher__link is-active" href="./" lang="es" hreflang="es" aria-current="page">ES</a><span class="lang-switcher__sep" aria-hidden="true">/</span><a class="lang-switcher__link" href="./en/" lang="en" hreflang="en">EN</a></nav>
+            <button class="theme-toggle" type="button" data-theme-toggle="data-theme-toggle" aria-label="Cambiar tema" aria-pressed="false" title="Cambiar tema">
+              <svg class="theme-toggle__icon--sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path>
+              </svg>
+              <svg class="theme-toggle__icon--moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path>
+              </svg>
+            </button>
+            <button class="menu-toggle l:hidden" type="button" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav" data-label-open="Abrir menú" data-label-close="Cerrar menú"><span class="menu-toggle__bar" aria-hidden="true"></span><span class="menu-toggle__bar" aria-hidden="true"></span><span class="menu-toggle__bar" aria-hidden="true"></span></button>
+          </div>
+        </div>
+        <nav class="mobile-nav l:hidden" id="mobile-nav" aria-label="Menú móvil" hidden>
+          <ul class="flex flex-col py-4 gap-1">
+            <li><a class="mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors" href="#inicio">Inicio</a></li>
+            <li><a class="mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors" href="#servicios">Servicios</a></li>
+            <li><a class="mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors" href="#portafolio">Portafolio</a></li>
+            <li><a class="mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors" href="#contacto">Contacto</a></li>
+            <li class="pt-2"><a class="block text-center px-5 py-3 bg-nw-accent text-white text-xs font-semibold uppercase tracking-widest rounded-full" href="https://wa.me/50670118183?text=Hola%20NeuroWebCR%2C%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto" target="_blank" rel="noopener noreferrer">Contactar</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main class="flex-1 overflow-x-hidden">
+      <section class="section-base relative overflow-hidden pattern-dots corner-accent" id="inicio"><img class="logo__img logo__img--light hero-watermark" src="./images/logo_w_v.png" alt="" aria-hidden="true" width="380" height="242" decoding="async"/><img class="logo__img logo__img--dark hero-watermark" src="./images/logo_b_v.png" alt="" aria-hidden="true" width="380" height="242" decoding="async"/>
+        <div class="main-container relative z-10">
+          <div class="container py-16 m:py-20 l:py-28 text-center">
+            <p class="animate-fade-up font-secondary text-xs m:text-sm font-medium uppercase tracking-[0.35em] text-nw-text-muted mb-6">Web • AI Agents • Automatización • Digital Solutions</p>
+            <h1 class="animate-fade-up animate-delay-1 max-w-4xl mx-auto"><span class="block text-3xl m:text-4xl l:text-5xl xl:text-6xl font-bold uppercase tracking-tight text-nw-text leading-tight">Soluciones Digitales</span><span class="block mt-2 text-4xl m:text-5xl l:text-6xl xl:text-7xl font-bold uppercase tracking-tight text-nw-accent">Inteligentes</span></h1>
+            <p class="animate-fade-up animate-delay-2 font-secondary max-w-2xl mx-auto mt-8 text-base m:text-lg text-nw-text-muted leading-relaxed">Creamos experiencias digitales, automatizamos procesos y desarrollamos soluciones con IA que impulsan tu negocio.</p>
+            <div class="animate-fade-up animate-delay-3 flex flex-col m:flex-row items-stretch m:items-center justify-center gap-4 mt-10 w-full max-w-[300px] mx-auto m:max-w-none"><a class="inline-flex w-full m:w-auto items-center justify-center px-8 py-3.5 bg-nw-text text-nw-bg text-sm font-semibold uppercase tracking-widest rounded-full hover:opacity-90 transition-opacity" href="#contacto">Hablemos de tu proyecto</a><a class="inline-flex w-full m:w-auto items-center justify-center px-8 py-3.5 border-2 border-nw-text text-nw-text text-sm font-semibold uppercase tracking-widest rounded-full hover:bg-nw-text hover:text-nw-bg transition-colors" href="#servicios">Ver servicios</a></div>
+            <div class="animate-fade-up animate-delay-3 w-16 h-1 bg-nw-accent mx-auto mt-12 rounded-full"></div>
+            <div class="mt-16 grid grid-cols-2 l:grid-cols-4 gap-6 l:gap-8 max-w-3xl mx-auto">
+              <div class="text-center p-4 rounded-xl border border-nw-surface-muted bg-[var(--nw-card)] backdrop-blur-sm">
+                <p class="text-2xl l:text-3xl font-bold text-nw-accent">4+</p>
+                <p class="font-secondary text-xs text-nw-text-muted mt-1 uppercase tracking-wide">Áreas de expertise</p>
+              </div>
+              <div class="text-center p-4 rounded-xl border border-nw-surface-muted bg-[var(--nw-card)] backdrop-blur-sm">
+                <p class="text-2xl l:text-3xl font-bold text-nw-accent">100%</p>
+                <p class="font-secondary text-xs text-nw-text-muted mt-1 uppercase tracking-wide">Enfoque premium</p>
+              </div>
+              <div class="text-center p-4 rounded-xl border border-nw-surface-muted bg-[var(--nw-card)] backdrop-blur-sm">
+                <p class="text-2xl l:text-3xl font-bold text-nw-accent">IA</p>
+                <p class="font-secondary text-xs text-nw-text-muted mt-1 uppercase tracking-wide">Automatización inteligente</p>
+              </div>
+              <div class="text-center p-4 rounded-xl border border-nw-surface-muted bg-[var(--nw-card)] backdrop-blur-sm">
+                <p class="text-2xl l:text-3xl font-bold text-nw-accent">CR</p>
+                <p class="font-secondary text-xs text-nw-text-muted mt-1 uppercase tracking-wide">Desde Costa Rica</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-stripe relative py-20 l:py-28" id="servicios">
+        <div class="main-container">
+          <div class="container">
+            <div class="text-center max-w-2xl mx-auto mb-14 l:mb-20">
+              <p class="text-xs font-semibold uppercase tracking-[0.3em] text-nw-accent mb-3">Qué hacemos</p>
+              <h2 class="text-3xl l:text-4xl font-bold uppercase tracking-tight text-nw-text">Servicios</h2>
+              <p class="font-secondary mt-4 text-nw-text-muted">Especializados en tecnología moderna para empresas que buscan innovar y crecer.</p>
+            </div>
+            <div class="grid grid-cols-1 m:grid-cols-2 border border-nw-surface-muted rounded-2xl overflow-hidden shadow-card">
+              <article class="service-card group p-8 l:p-10 bg-nw-surface border-b m:border-b border-nw-surface-muted m:border-r">
+                <div class="service-icon w-14 h-14 mb-6 rounded-xl bg-nw-bg flex items-center justify-center border border-nw-surface-muted"><span class="text-lg font-bold text-nw-text">&lt;/&gt;</span>
+                </div>
+                <h3 class="text-lg font-bold uppercase tracking-wide mb-3 text-nw-text group-hover:text-nw-accent transition-colors">Desarrollo Web</h3>
+                <p class="font-secondary text-sm text-nw-text-muted leading-relaxed">Sitios web modernos, rápidos y optimizados para resultados y conversión.</p>
+              </article>
+              <article class="service-card group p-8 l:p-10 bg-nw-surface border-b border-nw-surface-muted">
+                <div class="service-icon w-14 h-14 mb-6 rounded-xl bg-nw-bg flex items-center justify-center border border-nw-surface-muted"><span class="text-sm font-bold text-nw-accent">AI</span>
+                </div>
+                <h3 class="text-lg font-bold uppercase tracking-wide mb-3 text-nw-text group-hover:text-nw-accent transition-colors">AI Agents</h3>
+                <p class="font-secondary text-sm text-nw-text-muted leading-relaxed">Agentes inteligentes que automatizan tareas y mejoran la productividad de tu equipo.</p>
+              </article>
+              <article class="service-card group p-8 l:p-10 bg-nw-surface border-nw-surface-muted m:border-r">
+                <div class="service-icon w-14 h-14 mb-6 rounded-xl bg-nw-bg flex items-center justify-center border border-nw-surface-muted"><span class="text-xl text-nw-accent">⚙</span>
+                </div>
+                <h3 class="text-lg font-bold uppercase tracking-wide mb-3 text-nw-text group-hover:text-nw-accent transition-colors">Automatización</h3>
+                <p class="font-secondary text-sm text-nw-text-muted leading-relaxed">Automatizamos procesos para ahorrar tiempo, reducir costos y escalar operaciones.</p>
+              </article>
+              <article class="service-card group p-8 l:p-10 bg-nw-surface">
+                <div class="service-icon w-14 h-14 mb-6 rounded-xl bg-nw-bg flex items-center justify-center border border-nw-surface-muted"><span class="text-xl font-bold text-nw-accent">↗</span>
+                </div>
+                <h3 class="text-lg font-bold uppercase tracking-wide mb-3 text-nw-text group-hover:text-nw-accent transition-colors">Soluciones Digitales</h3>
+                <p class="font-secondary text-sm text-nw-text-muted leading-relaxed">Estrategias y herramientas digitales para hacer crecer tu marca con impacto real.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-band relative py-20 l:py-28 pattern-dots-band overflow-hidden" id="portafolio">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-nw-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="main-container relative z-10">
+          <div class="container">
+            <div class="flex flex-col l:flex-row l:items-end l:justify-between gap-6 mb-12 l:mb-16">
+              <div class="max-w-xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-nw-accent mb-3">Portafolio</p>
+                <h2 class="text-3xl l:text-4xl font-bold uppercase tracking-tight">Proyectos destacados</h2>
+                <p class="font-secondary mt-4 section-band-muted text-sm l:text-base">Soluciones desarrolladas con diseño moderno, automatización y tecnologías escalables.</p>
+              </div>
+              <p class="hidden l:block text-xs uppercase tracking-widest section-band-muted opacity-70">Haz clic en un proyecto para visitar el sitio</p>
+            </div>
+            <div class="portfolio-swiper swiper">
+              <div class="swiper-wrapper"><a class="swiper-slide portfolio-card portfolio-card--link h-full rounded-2xl overflow-hidden border bg-nw-band-surface border-[var(--nw-band-border)]" href="https://www.betanything.eu/" target="_blank" rel="noopener noreferrer" aria-label="Visitar proyecto: BetAnySports">
+                  <div class="aspect-video overflow-hidden"><img class="w-full h-full object-cover" src="./images/pf/bet.png" alt="" loading="lazy" aria-hidden="true"></div>
+                  <div class="p-6 l:p-8 text-left"><span class="inline-block text-xs font-semibold uppercase tracking-widest text-nw-accent mb-2">Gambling</span>
+                    <h3 class="text-xl font-bold uppercase tracking-wide mb-2 text-[var(--nw-band-text)]">BetAnySports</h3>
+                    <p class="font-secondary text-sm section-band-muted leading-relaxed mb-4">Sitio moderno con arquitectura escalable y optimización SEO.</p>
+                    <div class="flex flex-wrap gap-2 mb-4"><span class="portfolio-tag">Strapi</span><span class="portfolio-tag">Tailwind</span><span class="portfolio-tag">UI/UX</span>
+                    </div><span class="portfolio-card__cta text-xs font-semibold uppercase tracking-widest text-nw-accent">Visitar sitio →</span>
+                  </div></a><a class="swiper-slide portfolio-card portfolio-card--link h-full rounded-2xl overflow-hidden border bg-nw-band-surface border-[var(--nw-band-border)]" href="https://insidersbettingdigest.com/" target="_blank" rel="noopener noreferrer" aria-label="Visitar proyecto: Insiders Betting Digest">
+                  <div class="aspect-video overflow-hidden"><img class="w-full h-full object-cover" src="./images/pf/insiders.png" alt="" loading="lazy" aria-hidden="true"></div>
+                  <div class="p-6 l:p-8 text-left"><span class="inline-block text-xs font-semibold uppercase tracking-widest text-nw-accent mb-2">Gambling</span>
+                    <h3 class="text-xl font-bold uppercase tracking-wide mb-2 text-[var(--nw-band-text)]">Insiders Betting Digest</h3>
+                    <p class="font-secondary text-sm section-band-muted leading-relaxed mb-4">Sitio moderno con arquitectura escalable y optimización SEO.</p>
+                    <div class="flex flex-wrap gap-2 mb-4"><span class="portfolio-tag">Wordpress</span><span class="portfolio-tag">APIs</span><span class="portfolio-tag">Performance</span>
+                    </div><span class="portfolio-card__cta text-xs font-semibold uppercase tracking-widest text-nw-accent">Visitar sitio →</span>
+                  </div></a><a class="swiper-slide portfolio-card portfolio-card--link h-full rounded-2xl overflow-hidden border bg-nw-band-surface border-[var(--nw-band-border)]" href="https://crypto-tutorials.com/" target="_blank" rel="noopener noreferrer" aria-label="Visitar proyecto: crypto-tutorials">
+                  <div class="aspect-video overflow-hidden"><img class="w-full h-full object-cover" src="./images/pf/crypto.png" alt="" loading="lazy" aria-hidden="true"></div>
+                  <div class="p-6 l:p-8 text-left"><span class="inline-block text-xs font-semibold uppercase tracking-widest text-nw-accent mb-2">Gambling</span>
+                    <h3 class="text-xl font-bold uppercase tracking-wide mb-2 text-[var(--nw-band-text)]">crypto-tutorials</h3>
+                    <p class="font-secondary text-sm section-band-muted leading-relaxed mb-4">Sitio moderno con arquitectura escalable y optimización SEO.</p>
+                    <div class="flex flex-wrap gap-2 mb-4"><span class="portfolio-tag">Remix.js</span><span class="portfolio-tag">APIs</span><span class="portfolio-tag">Performance</span>
+                    </div><span class="portfolio-card__cta text-xs font-semibold uppercase tracking-widest text-nw-accent">Visitar sitio →</span>
+                  </div></a><a class="swiper-slide portfolio-card portfolio-card--link h-full rounded-2xl overflow-hidden border bg-nw-band-surface border-[var(--nw-band-border)]" href="https://www.mybookie.ag/" target="_blank" rel="noopener noreferrer" aria-label="Visitar proyecto: MyBookie">
+                  <div class="aspect-video overflow-hidden"><img class="w-full h-full object-cover" src="./images/pf/mb.png" alt="" loading="lazy" aria-hidden="true"></div>
+                  <div class="p-6 l:p-8 text-left"><span class="inline-block text-xs font-semibold uppercase tracking-widest text-nw-accent mb-2">Gambling</span>
+                    <h3 class="text-xl font-bold uppercase tracking-wide mb-2 text-[var(--nw-band-text)]">MyBookie</h3>
+                    <p class="font-secondary text-sm section-band-muted leading-relaxed mb-4">Sitio moderno con arquitectura escalable y optimización SEO.</p>
+                    <div class="flex flex-wrap gap-2 mb-4"><span class="portfolio-tag">Wordpress</span><span class="portfolio-tag">APIs</span><span class="portfolio-tag">Performance</span>
+                    </div><span class="portfolio-card__cta text-xs font-semibold uppercase tracking-widest text-nw-accent">Visitar sitio →</span>
+                  </div></a>
+              </div>
+              <div class="swiper-button-prev" aria-label="Anterior"></div>
+              <div class="swiper-button-next" aria-label="Siguiente"></div>
+              <div class="swiper-pagination portfolio-swiper__pagination" aria-hidden="false"></div>
+            </div>
+            <p class="text-center font-secondary text-sm section-band-muted mt-8">Proyectos seleccionados — sustituye las URLs por tus casos reales.</p>
+          </div>
+        </div>
+      </section>
+      <section class="section-base relative py-20 l:py-28 pattern-dots" id="contacto">
+        <div class="main-container">
+          <div class="container">
+            <div class="bg-nw-surface-muted/60 rounded-3xl p-6 m:p-10 l:p-14 shadow-card border border-nw-surface-muted">
+              <div class="grid grid-cols-1 l:grid-cols-2 gap-10 l:gap-16">
+                <div class="flex gap-5">
+                  <div class="w-1.5 shrink-0 bg-nw-accent rounded-full" aria-hidden="true"></div>
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-nw-accent mb-2">Contacto</p>
+                    <h2 class="text-2xl l:text-3xl font-bold uppercase tracking-tight leading-tight text-nw-text">Hablemos de tu proyecto</h2>
+                    <p class="font-secondary mt-4 text-nw-text-muted leading-relaxed">Estamos listos para ayudarte a llevar tu negocio al siguiente nivel con soluciones digitales modernas.</p>
+                    <div class="contact-actions mt-8"><a class="btn-whatsapp contact-actions__item" href="https://wa.me/50670118183?text=Hola%20NeuroWebCR%2C%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto" target="_blank" rel="noopener noreferrer">
+                        <svg class="w-8 h-8 shrink-0 text-green-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path>
+                        </svg>
+                        <div class="text-left"><span class="block text-xs font-semibold uppercase tracking-widest text-nw-text">Escríbenos por WhatsApp</span><span class="block text-sm font-medium text-nw-text-muted mt-0.5">+506 7011 8183</span></div></a><a class="contact-actions__item contact-actions__email" href="mailto:hola@neurowebcr.com">
+                        <svg class="w-5 h-5 shrink-0 text-nw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg><span class="contact-actions__email-text">hola@neurowebcr.com</span></a></div>
+                  </div>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center">
+                  <p class="text-sm font-bold uppercase tracking-[0.2em] text-nw-accent mb-6">Escanea para contactarnos</p>
+                  <div class="relative p-6 bg-nw-surface rounded-2xl shadow-card">
+                    <div class="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-nw-accent rounded-tl-lg"></div>
+                    <div class="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-nw-accent rounded-tr-lg"></div>
+                    <div class="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-nw-accent rounded-bl-lg"></div>
+                    <div class="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-nw-accent rounded-br-lg"></div>
+                    <div class="w-48 h-48 m:w-56 m:h-56 flex items-center justify-center bg-nw-bg rounded-lg overflow-hidden"><img class="w-full h-full object-contain p-2" src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&amp;margin=12&amp;data=https%3A%2F%2Fwa.me%2F50670118183" alt="Código QR para contactar por WhatsApp a NeuroWebCR" width="224" height="224" loading="lazy"></div>
+                  </div>
+                  <p class="font-secondary text-xs text-nw-text-muted mt-4 max-w-xs">Escanea con la cámara del celular para abrir el chat.</p><a class="mt-2 text-xs font-semibold uppercase tracking-widest text-nw-accent hover:underline" href="https://wa.me/50670118183?text=Hola%20NeuroWebCR%2C%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer section-band">
+      <div class="main-container">
+        <div class="container py-12 l:py-14">
+          <div class="footer-grid">
+            <div class="footer-brand"><a class="logo" href="#inicio" aria-label="NeuroWebCR - Inicio"><img class="logo__img logo__img--light" src="./images/logo_w_h.png" alt="NeuroWebCR" width="892" height="138" decoding="async"/><img class="logo__img logo__img--dark" src="./images/logo_b_h.png" alt="" width="886" height="132" decoding="async" aria-hidden="true"/></a>
+              <p class="footer-brand__text font-secondary">Desarrollo web, AI Agents, automatización y soluciones digitales inteligentes.</p>
+            </div>
+            <div class="footer-nav">
+              <p class="footer-label">Enlaces</p>
+              <nav class="footer-nav__list" aria-label="Enlaces"><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#portafolio">Portafolio</a><a href="#contacto">Contacto</a><a href="https://wa.me/50670118183?text=Hola%20NeuroWebCR%2C%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto" target="_blank" rel="noopener noreferrer">WhatsApp</a></nav>
+            </div>
+            <div class="footer-social">
+              <p class="footer-label">Redes</p>
+              <div class="footer-social__list"><a href="javascript:void(0)" aria-label="Instagram"><span>IG</span></a><a href="javascript:void(0)" aria-label="LinkedIn"><span>IN</span></a><a href="javascript:void(0)" aria-label="GitHub"><span>GH</span></a></div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p class="footer-bottom__url"><span class="text-nw-accent" aria-hidden="true">●</span><span>www.neurowebcr.com</span></p>
+            <p class="footer-bottom__copy font-secondary">© 2026 NeuroWebCR. Todos los derechos reservados.
+            </p>
+          </div>
+        </div>
+      </div><a class="fixed bottom-6 right-6 z-[999] w-14 h-14 flex items-center justify-center bg-green-500 text-white rounded-full shadow-lg hover:scale-110 transition-transform" href="https://wa.me/50670118183?text=Hola%20NeuroWebCR%2C%20me%20gustar%C3%ADa%20hablar%20sobre%20un%20proyecto" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path>
+        </svg></a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./site.js" defer></script>
+  </body>
+</html>
