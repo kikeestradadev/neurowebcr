@@ -54,6 +54,15 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
+			// Consent Mode v2: default denied in EEA until user consent is granted.
+			gtag('consent', 'default', {
+				'ad_storage': 'denied',
+				'analytics_storage': 'denied',
+				'ad_user_data': 'denied',
+				'ad_personalization': 'denied',
+				'wait_for_update': 500,
+				'region': ['AT','BE','BG','HR','CY','CZ','DE','DK','EE','ES','FI','FR','GR','HU','IE','IS','IT','LI','LT','LU','LV','MT','NL','NO','PL','PT','RO','SE','SI','SK']
+			});
 			gtag('config', 'G-3GGD52GQ13');
 		link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css")
 		link(rel="preconnect" href="https://fonts.googleapis.com")

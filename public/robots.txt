@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kikeestradadev.github.io/neurowebcr/sitemap.xml
+Sitemap: https://neurowebcr.com/sitemap.xml

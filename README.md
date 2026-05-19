@@ -2,7 +2,7 @@
 
 Landing corporativa con **tema light / dark**, Pug modular, Sass, Tailwind CSS 4 y Swiper.
 
-**Demo:** https://kikeestradadev.github.io/neurowebcr/
+**Demo:** https://neurowebcr.com/
 
 ## Stack y flujo (Prepros)
 
@@ -250,6 +250,7 @@ No mezcles ambos sin coordinar: si usas Prepros, despliega con `npm run deploy` 
   - `twitter:site` y `twitter:creator` listos para activarse cuando se definan handles reales
 - Medición:
   - Google Analytics 4 (`gtag.js`) instalado globalmente con ID `G-3GGD52GQ13` en la plantilla base
+  - Consent Mode v2 configurado con estado por defecto `denied` para usuarios del EEE
 - Datos estructurados (`JSON-LD`):
   - `Organization`
   - `ProfessionalService`
@@ -297,7 +298,29 @@ SITE_URL="https://neurowebcr.com" npm run build
    - `src/locales/es.json`
    - `src/locales/en.json`
 3. (Pendiente separado) Optimización de imágenes para Core Web Vitals.
-4. Configurar consentimiento para usuarios del EEE (Consent Mode) si aplica por audiencia/regulación.
+4. Integrar banner/CMP de cookies que dispare actualización de consentimiento (`gtag('consent', 'update', ...)`) según elección del usuario.
+
+### Consent Mode v2 (GA4)
+
+La plantilla aplica por defecto en EEE:
+
+- `ad_storage: denied`
+- `analytics_storage: denied`
+- `ad_user_data: denied`
+- `ad_personalization: denied`
+
+Cuando el usuario acepte cookies, el banner/CMP debe ejecutar:
+
+```js
+gtag('consent', 'update', {
+  ad_storage: 'granted',
+  analytics_storage: 'granted',
+  ad_user_data: 'granted',
+  ad_personalization: 'granted'
+});
+```
+
+Si rechaza, mantener `denied`.
 
 ### Validación rápida local
 

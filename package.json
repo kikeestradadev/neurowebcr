@@ -1,9 +1,9 @@
 {
 	"name": "neurowebcr",
 	"version": "1.0.0",
-	"description": "gh-pages link: https://kikeestradadev.github.io/neurowebcr/",
+	"description": "Landing corporativa NeuroWebCR",
 	"main": "public/index.html",
-	"homepage": "https://kikeestradadev.github.io/neurowebcr/",
+	"homepage": "https://neurowebcr.com/",
 	"scripts": {
 		"build:sass": "npx sass src/styles/styles.scss src/styles/styles.css --no-source-map",
 		"build:css": "npm run build:sass && npx @tailwindcss/cli -i src/styles/tailwind.css -o public/tailwind-dist.css",
