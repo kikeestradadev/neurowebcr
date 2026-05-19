@@ -141,6 +141,7 @@ Notas:
 ## Deploy a Producción (cPanel / Apache)
 
 Para `https://neurowebcr.com/`, usar solo el contenido generado en `public/`.
+Este proyecto usa Tailwind 4 (requiere Node >= 20 para compilar), por lo que en shared hosting con Node 16 se debe compilar en local.
 
 1. Compilar local:
 
@@ -155,6 +156,11 @@ npm run build
 5. Probar:
    - `https://neurowebcr.com/`
    - `https://neurowebcr.com/en/`
+
+### Nota para Shared Hosting
+
+- Si el servidor muestra `Unsupported engine` o error de `@tailwindcss/oxide`, no ejecutar build en servidor.
+- Flujo recomendado: `npm run build` en local + upload del contenido de `public/` a cPanel.
 
 ## GitHub Pages (deploy con Prepros)
 
