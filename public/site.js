@@ -1,6 +1,7 @@
 (function () {
 	const STORAGE_KEY = 'nw-theme';
 	const THEMES = ['light', 'dark'];
+	const ASSET_PREFIXES = ['/images/', './images/', '../images/', '/public/images/'];
 
 	const getPreferredTheme = () => {
 		const stored = localStorage.getItem(STORAGE_KEY);
@@ -120,6 +121,52 @@
 		});
 	};
 
+	const getAssetPath = (src) => {
+		if (!src) return '';
+		const normalized = src.split('?')[0].split('#')[0];
+		const marker = '/images/';
+		const idx = normalized.lastIndexOf(marker);
+		return idx === -1 ? '' : normalized.slice(idx + 1);
+	};
+
+	const buildAssetCandidates = (assetPath) => {
+		if (!assetPath) return [];
+		return ASSET_PREFIXES.map((prefix) => prefix + assetPath.replace(/^images\//, ''));
+	};
+
+	const initAssetFallbacks = () => {
+		const tryNext = (el, attrName) => {
+			const original = el.getAttribute(attrName) || '';
+			const originalAbs = (() => {
+				try {
+					return new URL(original, window.location.href).pathname;
+				} catch (_e) {
+					return '';
+				}
+			})();
+			const assetPath = getAssetPath(originalAbs || original);
+			const candidates = buildAssetCandidates(assetPath).filter((candidate) => candidate !== original);
+			if (!candidates.length) return;
+
+			el.dataset.assetCandidates = JSON.stringify(candidates);
+			el.dataset.assetCandidateIndex = '0';
+
+			el.addEventListener('error', () => {
+				const list = JSON.parse(el.dataset.assetCandidates || '[]');
+				const index = Number(el.dataset.assetCandidateIndex || '0');
+				if (index >= list.length) return;
+				el.dataset.assetCandidateIndex = String(index + 1);
+				el.setAttribute(attrName, list[index]);
+			});
+		};
+
+		document.querySelectorAll('img[src*="images/"]').forEach((img) => tryNext(img, 'src'));
+		document
+			.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]')
+			.forEach((link) => tryNext(link, 'href'));
+	};
+
+	initAssetFallbacks();
 	initTheme();
 	initMobileMenu();
 	initPortfolioSwiper();
