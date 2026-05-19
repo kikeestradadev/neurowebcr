@@ -1,0 +1,43 @@
+include _branding
+
+block config
+	-let currentPage 		= 'home'
+	-let content 			= 'My Page'
+	-let siteName 			= 'NeuroWebCR'
+	-let pageDescription 	= 'Desarrollo web, AI Agents, automatización y soluciones digitales inteligentes en Costa Rica.'
+	-let pageTitleSuffix	= 'Soluciones Digitales Inteligentes'
+doctype html
+html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light')
+	head
+		meta(charset="utf-8")
+		meta(name="description", content=pageDescription)
+		meta(name="viewport" content="width=device-width, initial-scale=1.0")
+		meta(name="apple-mobile-web-app-status-bar-style", content="default")
+		meta(name="format-detection", content="telephone=no")
+		meta(name="color-scheme", content="light dark")
+		meta(property="og:title", content=siteName)
+		meta(property="og:description", content=pageDescription)
+		meta(property="og:type", content="website")
+		link(rel="alternate" hreflang="es" href=langHrefEs)
+		link(rel="alternate" hreflang="en" href=langHrefEn)
+		link(rel="alternate" hreflang="x-default" href=langHrefEs)
+		link(rel="icon" href=assetBase + "images/ico.png" type="image/png")
+		link(rel="shortcut icon" href=assetBase + "images/ico.png" type="image/png")
+		link(rel="apple-touch-icon" href=assetBase + "images/ico.png")
+		script.
+			!(function(){try{var t=localStorage.getItem('nw-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','light')}})();
+		link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css")
+		link(rel="preconnect" href="https://fonts.googleapis.com")
+		link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+		link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet")
+		link(rel="stylesheet" href=assetBase + "tailwind-dist.css")
+		title= siteName + " | " + pageTitleSuffix
+	body(class=currentPage + ' bg-nw-bg text-nw-text flex flex-col min-h-screen pt-[var(--header-height)] antialiased' itemscope itemtype="http://schema.org/WebPage")
+		header.site-header(class='fixed top-0 left-0 right-0 w-full z-[1000] backdrop-blur-md border-b shadow-sm')
+			block main-header
+		main(class='flex-1 overflow-x-hidden')
+			block main-container
+		block main-footer
+		script(src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js")
+		script(src=assetBase + "site.js" defer)
+		block scripts

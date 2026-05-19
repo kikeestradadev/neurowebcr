@@ -1,0 +1,127 @@
+@use "sass:map";
+
+// =============================================================================
+// NeuroWebCR — Design tokens (Light / Dark)
+// Fuente única de verdad para variables CSS consumidas por Sass, Tailwind y JS
+// =============================================================================
+
+$nw-accent: #ff2b2b;
+$nw-header-height: 72px;
+$nw-header-height-desktop: 80px;
+
+// --- Light theme (default) ---
+$light: (
+	"bg": #f8f8f8,
+	"section-alt": #ececec,
+	"surface": #ffffff,
+	"surface-muted": #eaeaea,
+	"text": #111111,
+	"text-muted": #6b6b6b,
+	"header-bg": rgba(255, 255, 255, 0.9),
+	"header-border": rgba(234, 234, 234, 0.8),
+	"card": rgba(255, 255, 255, 0.6),
+	"shadow": rgba(0, 0, 0, 0.08),
+	"dot": #d4d4d4,
+	"band-bg": #e2e2e2,
+	"band-surface": #ffffff,
+	"band-text": #111111,
+	"band-text-muted": #6b6b6b,
+	"band-border": rgba(0, 0, 0, 0.08),
+	"band-dot": #d4d4d4,
+	"swiper-btn-bg": #ffffff,
+	"swiper-btn-border": #eaeaea,
+	"swiper-btn-text": #111111,
+	"swiper-bullet": #cccccc,
+);
+
+// --- Dark theme (franjas alternas: bg → section-alt → band) ---
+$dark: (
+	"bg": #060606,
+	"section-alt": #131313,
+	"surface": #1a1a1a,
+	"surface-muted": #242424,
+	"text": #f5f5f5,
+	"text-muted": #a3a3a3,
+	"header-bg": rgba(5, 5, 5, 0.92),
+	"header-border": rgba(255, 255, 255, 0.08),
+	"card": rgba(26, 26, 26, 0.85),
+	"shadow": rgba(0, 0, 0, 0.35),
+	"dot": rgba(255, 255, 255, 0.1),
+	"band-bg": #1e1e1e,
+	"band-surface": #262626,
+	"band-text": #f5f5f5,
+	"band-text-muted": rgba(245, 245, 245, 0.55),
+	"band-border": rgba(255, 255, 255, 0.12),
+	"band-dot": rgba(255, 255, 255, 0.08),
+	"swiper-btn-bg": #1a1a1a,
+	"swiper-btn-border": rgba(255, 255, 255, 0.12),
+	"swiper-btn-text": #f5f5f5,
+	"swiper-bullet": rgba(255, 255, 255, 0.25),
+);
+
+@mixin theme-vars($tokens) {
+	--nw-bg: #{map.get($tokens, "bg")};
+	--nw-section-alt: #{map.get($tokens, "section-alt")};
+	--nw-surface: #{map.get($tokens, "surface")};
+	--nw-surface-muted: #{map.get($tokens, "surface-muted")};
+	--nw-text: #{map.get($tokens, "text")};
+	--nw-text-muted: #{map.get($tokens, "text-muted")};
+	--nw-accent: #{$nw-accent};
+	--nw-header-bg: #{map.get($tokens, "header-bg")};
+	--nw-header-border: #{map.get($tokens, "header-border")};
+	--nw-card: #{map.get($tokens, "card")};
+	--nw-shadow: #{map.get($tokens, "shadow")};
+	--nw-dot: #{map.get($tokens, "dot")};
+	--nw-band-bg: #{map.get($tokens, "band-bg")};
+	--nw-band-surface: #{map.get($tokens, "band-surface")};
+	--nw-band-text: #{map.get($tokens, "band-text")};
+	--nw-band-text-muted: #{map.get($tokens, "band-text-muted")};
+	--nw-band-border: #{map.get($tokens, "band-border")};
+	--nw-band-dot: #{map.get($tokens, "band-dot")};
+	--nw-swiper-btn-bg: #{map.get($tokens, "swiper-btn-bg")};
+	--nw-swiper-btn-border: #{map.get($tokens, "swiper-btn-border")};
+	--nw-swiper-btn-text: #{map.get($tokens, "swiper-btn-text")};
+	--nw-swiper-bullet: #{map.get($tokens, "swiper-bullet")};
+	// Aliases legacy (nav-link, etc.)
+	--color-bg: var(--nw-bg);
+	--color-surface: var(--nw-surface);
+	--color-surface-alt: var(--nw-surface-muted);
+	--color-text: var(--nw-text);
+	--color-text-muted: var(--nw-text-muted);
+	--color-accent: var(--nw-accent);
+	--bg-body: var(--nw-bg);
+	--base-color: var(--nw-surface);
+	--header-height: #{$nw-header-height};
+	--footer-height: auto;
+}
+
+:root,
+[data-theme="light"] {
+	@include theme-vars($light);
+	color-scheme: light;
+}
+
+[data-theme="dark"] {
+	@include theme-vars($dark);
+	color-scheme: dark;
+}
+
+@media (min-width: 960px) {
+	:root,
+	[data-theme="light"],
+	[data-theme="dark"] {
+		--header-height: #{$nw-header-height-desktop};
+	}
+}
+
+// Transición suave al cambiar tema
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+	transition:
+		background-color 0.25s ease,
+		border-color 0.25s ease,
+		color 0.2s ease,
+		box-shadow 0.25s ease !important;
+}

@@ -1,0 +1,68 @@
+-
+	const slider1 = [
+		{
+			img: 'images/img4.jpg', 
+			title: 'slider_item_1'
+		},
+		{
+			img: 'images/img2.jpg',
+			title: 'slider_item_2'
+		},
+		{
+			img: 'images/img3.jpg',
+			title: 'slider_item_3'
+		},
+		{
+			img: 'images/img4.jpg',
+			title: 'slider_item_4'
+		}
+	]
+
+	const slider2 = [
+		{
+			img: 'images/img4.jpg',
+			title: 'example2 - item 1',
+			category: {
+				cat1: 'cat1',
+				cat2: 'cat2'
+			}
+		},
+		{
+			img: 'images/img2.jpg',
+			title: 'example2 - item 2',
+			category: {
+				cat1: 'cat1',
+				cat2: 'cat2'
+			}
+		},
+		{
+			img: 'images/img3.jpg',
+			title: 'example2 - item 3',
+			category: {
+				cat1: 'cat1',
+				cat2: 'cat2'
+			}
+		},
+		{
+			img: 'images/img4.jpg',
+			title: 'example2 - item 4',
+			category: {
+				cat1: 'cat1',
+				cat2: 'cat2'
+			}
+		}
+	]
+
+section(class="main-container border border-[steelblue]") 
+	div(class="container  border border-[tomato]") 
+		each item in slider1
+			div
+				img(src=item.img, style='width:100px')
+				p=item.title
+		h1 slider2
+		each item in slider2
+			div
+				img(src=item.img, style='width:100px')
+				p=item.title
+				p=item.category.cat1
+				p=item.category.cat2

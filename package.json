@@ -1,0 +1,38 @@
+{
+	"name": "neurowebcr",
+	"version": "1.0.0",
+	"description": "gh-pages link: https://kikeestradadev.github.io/neurowebcr",
+	"main": "public/index.html",
+	"homepage": "https://kikeestradadev.github.io/neurowebcr/",
+	"scripts": {
+		"build:sass": "npx sass src/styles/styles.scss src/styles/styles.css --no-source-map",
+		"build:css": "npm run build:sass && npx @tailwindcss/cli -i src/styles/tailwind.css -o public/tailwind-dist.css",
+		"build:pug": "node scripts/compile-pug.js",
+		"build": "npm run build:css && npm run build:pug",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"deploy": "gh-pages -d public",
+		"deploy:full": "npm run build && gh-pages -d public"
+	},
+	"dependencies": {
+		"caniuse-lite": "^1.0.30001793",
+		"gh-pages": "^6.3.0",
+		"update-browserslist-db": "^1.1.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kikeestradadev/neurowebcr.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/kikeestradadev/neurowebcr/issues"
+	},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.3.0",
+		"@tailwindcss/typography": "^0.5.16",
+		"jstransformer-markdown-it": "^3.0.0",
+		"pug": "^3.0.4",
+		"tailwindcss": "^4.3.0"
+	}
+}

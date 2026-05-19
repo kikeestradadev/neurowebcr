@@ -1,0 +1,19 @@
+::selection { 
+	color: white;
+	background: #9e852e;
+}
+html,
+body {
+	font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.font-secondary {
+	font-family: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+input,
+button,
+select,
+textarea {
+	font: inherit;
+}

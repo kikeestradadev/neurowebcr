@@ -1,0 +1,31 @@
+extends ../config/template
+
+append config
+	-currentPage		= 'home'
+	-siteName			= 'NeuroWebCR'
+	-pageDescription	= t.meta.description
+	-pageTitleSuffix	= t.meta.titleSuffix
+	-
+		const whatsappNumber = '50670118183'
+		const whatsappMessage = t.whatsapp.message
+		const whatsappUrl = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(whatsappMessage)
+		const whatsappDisplay = '+506 7011 8183'
+		const whatsappQrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=12&data=' + encodeURIComponent('https://wa.me/' + whatsappNumber)
+		const contactEmail = 'hola@neurowebcr.com'
+		const currentYear = new Date().getFullYear()
+
+include ../mixins/logo
+include ../mixins/theme-toggle
+include ../mixins/lang-switcher
+
+block main-header
+	include ../modulos/header
+
+block main-container
+	include ../modulos/hero
+	include ../modulos/servicios
+	include ../modulos/portafolio
+	include ../modulos/contacto
+
+block main-footer
+	include ../modulos/footer

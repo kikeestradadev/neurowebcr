@@ -1,0 +1,129 @@
+{
+	"lang": "en",
+	"alternateHref": "../",
+	"meta": {
+		"description": "Web development, AI agents, automation, and smart digital solutions. We build digital experiences that grow your business.",
+		"titleSuffix": "Smart Digital Solutions"
+	},
+	"whatsapp": {
+		"message": "Hi NeuroWebCR, I'd like to talk about a project"
+	},
+	"langSwitcher": {
+		"label": "Language",
+		"es": "Spanish",
+		"en": "English"
+	},
+	"nav": {
+		"ariaMain": "Main navigation",
+		"ariaMobile": "Mobile menu",
+		"home": "Home",
+		"services": "Services",
+		"portfolio": "Portfolio",
+		"contact": "Contact",
+		"cta": "Get in touch",
+		"openMenu": "Open menu",
+		"closeMenu": "Close menu"
+	},
+	"hero": {
+		"tagline": "Web • AI Agents • Automation • Digital Solutions",
+		"titleLine1": "Smart Digital",
+		"titleLine2": "Solutions",
+		"subtitle": "We create digital experiences, automate processes, and build AI-powered solutions that drive your business forward.",
+		"ctaPrimary": "Let's talk about your project",
+		"ctaSecondary": "View services",
+		"stat1Label": "Areas of expertise",
+		"stat2Label": "Premium focus",
+		"stat3Value": "AI",
+		"stat3Label": "Intelligent automation",
+		"stat4Label": "Based in Costa Rica"
+	},
+	"services": {
+		"eyebrow": "What we do",
+		"title": "Services",
+		"intro": "Specialized in modern technology for companies looking to innovate and grow.",
+		"items": [
+			{
+				"title": "Web Development",
+				"description": "Modern, fast websites optimized for results and conversion."
+			},
+			{
+				"title": "AI Agents",
+				"description": "Intelligent agents that automate tasks and boost your team's productivity."
+			},
+			{
+				"title": "Automation",
+				"description": "We automate processes to save time, cut costs, and scale operations."
+			},
+			{
+				"title": "Digital Solutions",
+				"description": "Digital strategies and tools to grow your brand with real impact."
+			}
+		]
+	},
+	"portfolio": {
+		"eyebrow": "Portfolio",
+		"title": "Featured projects",
+		"intro": "Solutions built with modern design, automation, and scalable technology.",
+		"hint": "Click a project to visit the website",
+		"visitSite": "Visit site →",
+		"visitAria": "Visit project",
+		"footnote": "Selected projects — replace URLs with your real case studies.",
+		"prev": "Previous",
+		"next": "Next",
+		"items": [
+			{
+				"title": "BetAnySports",
+				"category": "Gambling",
+				"excerpt": "Modern site with scalable architecture and SEO optimization.",
+				"description": "Modern site with scalable architecture and SEO optimization.",
+				"image": "images/pf/bet.png",
+				"url": "https://www.betanything.eu/",
+				"tags": ["Strapi", "Tailwind", "UI/UX", "SEO", "Remix.js"]
+			},
+			{
+				"title": "Insiders Betting Digest",
+				"category": "Gambling",
+				"excerpt": "Modern site with scalable architecture and SEO optimization.",
+				"description": "Modern site with scalable architecture and SEO optimization.",
+				"image": "images/pf/insiders.png",
+				"url": "https://insidersbettingdigest.com/",
+				"tags": ["Wordpress", "APIs", "Performance", "Analytics"]
+			},
+			{
+				"title": "crypto-tutorials",
+				"category": "Gambling",
+				"excerpt": "Modern site with scalable architecture and SEO optimization.",
+				"description": "Modern site with scalable architecture and SEO optimization.",
+				"image": "images/pf/crypto.png",
+				"url": "https://crypto-tutorials.com/",
+				"tags": ["Remix.js", "APIs", "Performance", "Analytics"]
+			},
+			{
+				"title": "MyBookie",
+				"category": "Gambling",
+				"excerpt": "Modern site with scalable architecture and SEO optimization.",
+				"description": "Modern site with scalable architecture and SEO optimization.",
+				"image": "images/pf/mb.png",
+				"url": "https://www.mybookie.ag/",
+				"tags": ["Wordpress", "APIs", "Performance", "Analytics"]
+			}
+		]
+	},
+	"contact": {
+		"eyebrow": "Contact",
+		"title": "Let's talk about your project",
+		"intro": "We're ready to help you take your business to the next level with modern digital solutions.",
+		"whatsappTitle": "Message us on WhatsApp",
+		"qrTitle": "Scan to contact us",
+		"qrAlt": "QR code to contact NeuroWebCR on WhatsApp",
+		"qrHint": "Scan with your phone camera to open the chat.",
+		"openWhatsapp": "Open WhatsApp"
+	},
+	"footer": {
+		"tagline": "Web development, AI agents, automation, and smart digital solutions.",
+		"linksLabel": "Links",
+		"socialLabel": "Social",
+		"copyright": "NeuroWebCR. All rights reserved.",
+		"whatsappAria": "Contact on WhatsApp"
+	}
+}

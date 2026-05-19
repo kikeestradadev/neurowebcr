@@ -1,0 +1,19 @@
+//- Selector ES / EN (langHrefEs y langHrefEn vienen del build)
+
+mixin langSwitcher
+	nav.lang-switcher(aria-label=t.langSwitcher.label)
+		a.lang-switcher__link(
+			href=langHrefEs
+			lang='es'
+			hreflang='es'
+			class=(locale === 'es' ? 'is-active' : undefined)
+			aria-current=(locale === 'es' ? 'page' : undefined)
+		) ES
+		span.lang-switcher__sep(aria-hidden='true') /
+		a.lang-switcher__link(
+			href=langHrefEn
+			lang='en'
+			hreflang='en'
+			class=(locale === 'en' ? 'is-active' : undefined)
+			aria-current=(locale === 'en' ? 'page' : undefined)
+		) EN

@@ -1,0 +1,10 @@
+-let coreSaludo = 'Core Module';
+section(class="main-container border border-[steelblue]") 
+	div(class="container border border-[tomato]") 
+		h1 Flex
+		div(class='flex flex-wrap')
+			-for(let i = 1; i<=10; i++)
+				div(class='w-full sm:w-1/2 m:w-1/3 l:w-1/4 lg:w-1/5 xl:w-1/6 xxl:w-1/7 p-3')
+					div(class='bg-red-300 min-[640px]:max-[1280px]:bg-[blue] h-32 flex items-center justify-center')
+						span: b=coreSaludo 
+							| #{i}

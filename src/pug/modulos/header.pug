@@ -1,0 +1,34 @@
+div(class='main-container')
+	div(class='flex items-center justify-between h-[var(--header-height)] gap-4')
+		+logoHorizontal()
+
+		nav(class='hidden l:flex items-center gap-6 xl:gap-8' aria-label=t.nav.ariaMain)
+			a(href='#inicio' class='nav-link')= t.nav.home
+			a(href='#servicios' class='nav-link')= t.nav.services
+			a(href='#portafolio' class='nav-link')= t.nav.portfolio
+			a(href='#contacto' class='nav-link')= t.nav.contact
+
+		div(class='flex items-center gap-2 shrink-0')
+			+langSwitcher()
+			+themeToggle()
+			button.menu-toggle(
+				type='button'
+				id='menu-toggle'
+				class='l:hidden'
+				aria-label=t.nav.openMenu
+				aria-expanded='false'
+				aria-controls='mobile-nav'
+				data-label-open=t.nav.openMenu
+				data-label-close=t.nav.closeMenu
+			)
+				span.menu-toggle__bar(aria-hidden='true')
+				span.menu-toggle__bar(aria-hidden='true')
+				span.menu-toggle__bar(aria-hidden='true')
+
+	nav#mobile-nav.mobile-nav(class='l:hidden' aria-label=t.nav.ariaMobile hidden)
+		ul(class='flex flex-col py-4 gap-1')
+			li: a(href='#inicio' class='mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors')= t.nav.home
+			li: a(href='#servicios' class='mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors')= t.nav.services
+			li: a(href='#portafolio' class='mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors')= t.nav.portfolio
+			li: a(href='#contacto' class='mobile-nav-link block px-2 py-3 text-sm font-medium uppercase tracking-widest text-nw-text hover:text-nw-accent transition-colors')= t.nav.contact
+			li(class='pt-2'): a(href=whatsappUrl target='_blank' rel='noopener noreferrer' class='block text-center px-5 py-3 bg-nw-accent text-white text-xs font-semibold uppercase tracking-widest rounded-full')= t.nav.cta
