@@ -3,7 +3,15 @@
 	"alternateHref": "./en/",
 	"meta": {
 		"description": "Desarrollo web, AI Agents, automatización y soluciones digitales inteligentes. Creamos experiencias digitales que impulsan tu negocio.",
-		"titleSuffix": "Soluciones Digitales Inteligentes"
+		"titleSuffix": "Soluciones Digitales Inteligentes",
+		"twitterSite": "",
+		"twitterCreator": ""
+	},
+	"seo": {
+		"businessType": "ProfessionalService",
+		"areaServed": ["Costa Rica"],
+		"availableLanguage": ["es", "en"],
+		"serviceType": ["Desarrollo Web", "AI Agents", "Automatización", "Soluciones Digitales"]
 	},
 	"whatsapp": {
 		"message": "Hola NeuroWebCR, me gustaría hablar sobre un proyecto"
@@ -12,6 +20,9 @@
 		"label": "Idioma",
 		"es": "Español",
 		"en": "Inglés"
+	},
+	"theme": {
+		"toggleLabel": "Cambiar tema"
 	},
 	"nav": {
 		"ariaMain": "Navegación principal",

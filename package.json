@@ -9,7 +9,8 @@
 		"build:css": "npm run build:sass && npx @tailwindcss/cli -i src/styles/tailwind.css -o public/tailwind-dist.css",
 		"build:pug": "node scripts/compile-pug.js",
 		"watch:pug": "node scripts/compile-pug.js --watch",
-		"build": "npm run build:css && npm run build:pug",
+		"build:seo": "node scripts/generate-seo-files.js",
+		"build": "npm run build:css && npm run build:pug && npm run build:seo",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"deploy": "gh-pages -d public",
 		"deploy:full": "npm run build && gh-pages -d public"

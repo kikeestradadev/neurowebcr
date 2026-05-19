@@ -6,31 +6,128 @@ block config
 	-let siteName 			= 'NeuroWebCR'
 	-let pageDescription 	= 'Desarrollo web, AI Agents, automatización y soluciones digitales inteligentes en Costa Rica.'
 	-let pageTitleSuffix	= 'Soluciones Digitales Inteligentes'
+	-let siteUrl			= seoSiteUrl || 'https://neurowebcr.com'
+	-let currentUrl			= seoCurrentUrl || (siteUrl + '/')
+	-let esUrl				= seoEsUrl || (siteUrl + '/')
+	-let enUrl				= seoEnUrl || (siteUrl + '/en/')
+	-let ogImage			= seoOgImage || (siteUrl + '/images/logo_b_h.png')
+	-let ogLocale			= seoOgLocale || (locale === 'es' ? 'es_CR' : 'en_US')
+	-let ogLocaleAlternate	= seoOgLocaleAlternate || (locale === 'es' ? 'en_US' : 'es_CR')
 doctype html
 html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light')
 	head
 		meta(charset="utf-8")
 		meta(name="description", content=pageDescription)
+		meta(name="robots", content="index,follow,max-image-preview:large")
 		meta(name="viewport" content="width=device-width, initial-scale=1.0")
 		meta(name="apple-mobile-web-app-status-bar-style", content="default")
 		meta(name="format-detection", content="telephone=no")
 		meta(name="color-scheme", content="light dark")
 		meta(property="og:title", content=siteName)
+		meta(property="og:site_name", content=siteName)
 		meta(property="og:description", content=pageDescription)
 		meta(property="og:type", content="website")
-		link(rel="alternate" hreflang="es" href=langHrefEs)
-		link(rel="alternate" hreflang="en" href=langHrefEn)
-		link(rel="alternate" hreflang="x-default" href=langHrefEs)
+		meta(property="og:url", content=currentUrl)
+		meta(property="og:image", content=ogImage)
+		meta(property="og:locale", content=ogLocale)
+		meta(property="og:locale:alternate", content=ogLocaleAlternate)
+		meta(name="twitter:card", content="summary_large_image")
+		meta(name="twitter:title", content=siteName + " | " + pageTitleSuffix)
+		meta(name="twitter:description", content=pageDescription)
+		meta(name="twitter:image", content=ogImage)
+		if t.meta.twitterSite
+			meta(name="twitter:site", content=t.meta.twitterSite)
+		if t.meta.twitterCreator
+			meta(name="twitter:creator", content=t.meta.twitterCreator)
+		link(rel="canonical" href=currentUrl)
+		link(rel="alternate" hreflang="es" href=esUrl)
+		link(rel="alternate" hreflang="en" href=enUrl)
+		link(rel="alternate" hreflang="x-default" href=esUrl)
 		link(rel="icon" href=assetBase + "images/ico.png" type="image/png")
 		link(rel="shortcut icon" href=assetBase + "images/ico.png" type="image/png")
 		link(rel="apple-touch-icon" href=assetBase + "images/ico.png")
 		script.
 			!(function(){try{var t=localStorage.getItem('nw-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','light')}})();
+		// Google tag (gtag.js) - GA4
+		script(async src="https://www.googletagmanager.com/gtag/js?id=G-3GGD52GQ13")
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-3GGD52GQ13');
 		link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css")
 		link(rel="preconnect" href="https://fonts.googleapis.com")
 		link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
 		link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet")
 		link(rel="stylesheet" href=assetBase + "tailwind-dist.css")
+		-
+			const socialProfiles = [
+				t.footer.socialInstagram,
+				t.footer.socialLinkedIn,
+				t.footer.socialGitHub
+			].filter(Boolean).filter((url) => {
+				const normalized = String(url).trim().replace(/\/+$/, '');
+				return ![
+					'https://www.instagram.com',
+					'https://www.linkedin.com',
+					'https://github.com'
+				].includes(normalized);
+			});
+			const businessType = (t.seo && t.seo.businessType) || "ProfessionalService";
+			const schemaGraph = {
+				"@context": "https://schema.org",
+				"@graph": [
+					{
+						"@type": "Organization",
+						"@id": siteUrl + "/#organization",
+						"name": siteName,
+						"url": siteUrl + "/",
+						"logo": ogImage,
+						...(socialProfiles.length ? { "sameAs": socialProfiles } : {})
+					},
+					{
+						"@type": businessType,
+						"@id": siteUrl + "/#business",
+						"name": siteName,
+						"url": siteUrl + "/",
+						"image": ogImage,
+						"description": pageDescription,
+						"telephone": "+50670118183",
+						"email": "hola@neurowebcr.com",
+						"areaServed": (t.seo && t.seo.areaServed) || ["Costa Rica"],
+						"availableLanguage": (t.seo && t.seo.availableLanguage) || [locale],
+						"serviceType": (t.seo && t.seo.serviceType) || [],
+						...(socialProfiles.length ? { "sameAs": socialProfiles } : {}),
+						"address": {
+							"@type": "PostalAddress",
+							"addressCountry": "CR"
+						}
+					},
+					{
+						"@type": "WebSite",
+						"@id": siteUrl + "/#website",
+						"url": siteUrl + "/",
+						"name": siteName,
+						"inLanguage": ["es-CR", "en"]
+					},
+					{
+						"@type": "WebPage",
+						"@id": currentUrl + "#webpage",
+						"url": currentUrl,
+						"name": siteName + " | " + pageTitleSuffix,
+						"description": pageDescription,
+						"inLanguage": locale,
+						"isPartOf": {
+							"@id": siteUrl + "/#website"
+						},
+						"about": {
+							"@id": siteUrl + "/#business"
+						}
+					}
+				]
+			}
+		script(type="application/ld+json")
+			!= JSON.stringify(schemaGraph)
 		title= siteName + " | " + pageTitleSuffix
 	body(class=currentPage + ' bg-nw-bg text-nw-text flex flex-col min-h-screen pt-[var(--header-height)] antialiased' itemscope itemtype="http://schema.org/WebPage")
 		header.site-header(class='fixed top-0 left-0 right-0 w-full z-[1000] backdrop-blur-md border-b shadow-sm')

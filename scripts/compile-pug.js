@@ -1,11 +1,13 @@
 const pug = require('pug');
 const fs = require('fs');
 const path = require('path');
+const pkg = require('../package.json');
 
 const input = path.join(__dirname, '../src/pug/pages/index.pug');
 const basedir = path.join(__dirname, '../src/pug');
 const publicDir = path.join(__dirname, '../public');
 const localesDir = path.join(__dirname, '../src/locales');
+const siteUrl = (process.env.SITE_URL || pkg.homepage || 'https://neurowebcr.com').replace(/\/+$/, '');
 
 const LOCALES = [
 	{ code: 'es', outDir: publicDir, assetBase: './' },
@@ -22,6 +24,13 @@ const compileAll = () => {
 		const langHrefEs = code === 'es' ? './' : '../';
 		const langHrefEn = code === 'es' ? './en/' : './';
 		const t = loadLocale(code);
+		const currentPath = code === 'es' ? '/' : '/en/';
+		const currentUrl = `${siteUrl}${currentPath}`;
+		const esUrl = `${siteUrl}/`;
+		const enUrl = `${siteUrl}/en/`;
+		const ogImage = `${siteUrl}/images/logo_b_h.png`;
+		const ogLocale = code === 'es' ? 'es_CR' : 'en_US';
+		const ogLocaleAlternate = code === 'es' ? 'en_US' : 'es_CR';
 		const portfolioItems = t.portfolio.items.map((item) => ({
 			...item,
 			image: assetBase + item.image,
@@ -35,6 +44,13 @@ const compileAll = () => {
 			assetBase,
 			langHrefEs,
 			langHrefEn,
+			seoCurrentUrl: currentUrl,
+			seoEsUrl: esUrl,
+			seoEnUrl: enUrl,
+			seoOgImage: ogImage,
+			seoOgLocale: ogLocale,
+			seoOgLocaleAlternate: ogLocaleAlternate,
+			seoSiteUrl: siteUrl,
 			portfolioItems,
 		});
 

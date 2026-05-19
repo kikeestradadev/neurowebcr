@@ -232,3 +232,77 @@ Eso sube **solo** `public/` a la rama `gh-pages`. No ejecuta Sass ni Pug por ti.
 | **Push a `main` + Actions** | GitHub (`npm run build`) | Si no usas Prepros en el equipo |
 
 No mezcles ambos sin coordinar: si usas Prepros, despliega con `npm run deploy` después de compilar; no hace falta que Actions compile por ti.
+
+## SEO técnico (estado actual)
+
+### Implementado
+
+- Meta base:
+  - `title`
+  - `meta description`
+  - `meta robots="index,follow,max-image-preview:large"`
+- Internacionalización SEO:
+  - `canonical` absoluto por idioma (`/` y `/en/`)
+  - `hreflang` (`es`, `en`, `x-default`)
+- Social meta:
+  - Open Graph: `og:title`, `og:site_name`, `og:description`, `og:type`, `og:url`, `og:image`, `og:locale`, `og:locale:alternate`
+  - Twitter: `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
+  - `twitter:site` y `twitter:creator` listos para activarse cuando se definan handles reales
+- Medición:
+  - Google Analytics 4 (`gtag.js`) instalado globalmente con ID `G-3GGD52GQ13` en la plantilla base
+- Datos estructurados (`JSON-LD`):
+  - `Organization`
+  - `ProfessionalService`
+  - `WebSite`
+  - `WebPage`
+- Indexación:
+  - `public/robots.txt`
+  - `public/sitemap.xml` con versiones ES/EN y `x-default`
+
+### Archivos SEO clave
+
+- Plantilla SEO: `src/pug/config/template.pug`
+- Compilación Pug + URLs absolutas: `scripts/compile-pug.js`
+- Generación de `robots.txt` y `sitemap.xml`: `scripts/generate-seo-files.js`
+- Script build integrado: `package.json` (`build:seo` y `build`)
+
+### Cómo se construye SEO
+
+```bash
+npm run build
+```
+
+Este comando:
+1. Compila CSS
+2. Compila Pug (ES/EN)
+3. Genera `public/robots.txt` y `public/sitemap.xml`
+
+### Dominio canónico (`SITE_URL`)
+
+La URL base SEO se toma de:
+1. Variable de entorno `SITE_URL` (prioridad alta)
+2. `homepage` en `package.json`
+3. Fallback: `https://neurowebcr.com`
+
+Ejemplo para producción:
+
+```bash
+SITE_URL="https://neurowebcr.com" npm run build
+```
+
+### Pendientes SEO (acordados)
+
+1. Definir perfiles reales de marca para `sameAs` (Instagram, LinkedIn, GitHub, etc.).
+2. Definir `twitter:site` y `twitter:creator` reales en locales:
+   - `src/locales/es.json`
+   - `src/locales/en.json`
+3. (Pendiente separado) Optimización de imágenes para Core Web Vitals.
+4. Configurar consentimiento para usuarios del EEE (Consent Mode) si aplica por audiencia/regulación.
+
+### Validación rápida local
+
+```bash
+rg -n "canonical|hreflang|og:|twitter:|application/ld\\+json|meta name=\"robots\"" public/index.html public/en/index.html
+cat public/robots.txt
+cat public/sitemap.xml
+```
