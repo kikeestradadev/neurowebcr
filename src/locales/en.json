@@ -106,6 +106,51 @@
 				"image": "images/pf/mb.png",
 				"url": "https://www.mybookie.ag/",
 				"tags": ["Wordpress", "APIs", "Performance", "Analytics"]
+			},
+			{
+				"title": "Universidad Ducens",
+				"category": "Education",
+				"excerpt": "Modern WordPress site with scalable architecture and SEO.",
+				"description": "Modern WordPress site with scalable architecture and SEO.",
+				"image": "images/pf/universidadducens.png",
+				"url": "https://universidadducens.edu.mx/",
+				"tags": ["WordPress", "Education", "UI/UX", "SEO"]
+			},
+			{
+				"title": "Macro Arte Contemporaneo",
+				"category": "Culture",
+				"excerpt": "Modern WordPress magazine with scalable architecture and SEO.",
+				"description": "Modern WordPress magazine with scalable architecture and SEO.",
+				"image": "images/pf/macroartecontemporaneo.png",
+				"url": "https://macroartecontemporaneo.com/",
+				"tags": ["WordPress", "Culture", "Magazine", "SEO"]
+			},
+			{
+				"title": "Oscar McFly Navarro",
+				"category": "Art",
+				"excerpt": "WordPress art site with scalable architecture and SEO.",
+				"description": "WordPress art site with scalable architecture and SEO.",
+				"image": "images/pf/mcflynavarro.png",
+				"url": "https://mcflynavarro.com/art/",
+				"tags": ["WordPress", "Art", "Portfolio", "SEO"]
+			},
+			{
+				"title": "Guardian AI",
+				"category": "Social impact",
+				"excerpt": "WordPress platform with scalable architecture and SEO.",
+				"description": "WordPress platform with scalable architecture and SEO.",
+				"image": "images/pf/soyguardian.jpeg",
+				"url": "https://soyguardian.com/",
+				"tags": ["WordPress", "AI", "Social impact", "SEO"]
+			},
+			{
+				"title": "Bay Island",
+				"category": "Platform",
+				"excerpt": "Modern Laravel system with scalable architecture and SEO.",
+				"description": "Modern Laravel system with scalable architecture and SEO.",
+				"image": "images/pf/bayisland.jpeg",
+				"url": "https://bayisland.cloud/",
+				"tags": ["Laravel", "SaaS", "APIs", "SEO"]
 			}
 		]
 	},
@@ -123,6 +168,9 @@
 		"tagline": "Web development, AI agents, automation, and smart digital solutions.",
 		"linksLabel": "Links",
 		"socialLabel": "Social",
+		"socialInstagram": "https://www.instagram.com/",
+		"socialLinkedIn": "https://www.linkedin.com/",
+		"socialGitHub": "https://github.com/",
 		"copyright": "NeuroWebCR. All rights reserved.",
 		"whatsappAria": "Contact on WhatsApp"
 	}

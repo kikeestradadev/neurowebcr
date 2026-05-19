@@ -262,52 +262,83 @@ body.mobile-nav-open {
 	transform: scale(1.05);
 }
 
-.portfolio-swiper {
-	// Paginación debajo de las tarjetas (no superpuesta)
-	overflow: visible;
-
-	.swiper-pagination,
-	&__pagination {
+.portfolio-swiper-group {
+	.portfolio-swiper__pagination,
+	.swiper-pagination {
 		position: relative !important;
 		inset: auto !important;
 		width: 100%;
 		margin-top: 2.5rem;
 		padding-top: 0.25rem;
-	}
-
-	.swiper-button-prev,
-	.swiper-button-next {
-		width: 44px;
-		height: 44px;
-		background: var(--nw-swiper-btn-bg);
-		border: 1px solid var(--nw-swiper-btn-border);
-		border-radius: 50%;
-		color: var(--nw-swiper-btn-text);
-		transition: all 0.2s ease;
-
-		&::after {
-			font-size: 16px;
-			font-weight: 700;
-		}
-
-		&:hover {
-			background: var(--nw-accent);
-			border-color: var(--nw-accent);
-			color: #fff;
-		}
+		--swiper-pagination-color: var(--nw-accent);
+		--swiper-pagination-bullet-inactive-color: var(--nw-accent);
+		--swiper-pagination-bullet-inactive-opacity: 0.4;
 	}
 
 	.swiper-pagination-bullet {
-		width: 8px;
-		height: 8px;
-		background: var(--nw-swiper-bullet);
-		opacity: 1;
+		width: 12px;
+		height: 12px;
+		background: var(--nw-accent);
+		opacity: 0.4;
+		transition: width 0.25s ease, opacity 0.25s ease, border-radius 0.25s ease;
 	}
 
 	.swiper-pagination-bullet-active {
 		background: var(--nw-accent);
-		width: 24px;
-		border-radius: 4px;
+		opacity: 1;
+		width: 32px;
+		border-radius: 6px;
+	}
+}
+
+.portfolio-swiper {
+	--swiper-navigation-color: var(--nw-swiper-btn-text);
+
+	.swiper-slide {
+		width: 400px;
+		flex-shrink: 0;
+	}
+
+	.swiper-button-prev,
+	.swiper-button-next {
+		display: none;
+		transition: all 0.2s ease;
+
+		@include from(l) {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			top: 50%;
+			margin-top: 0;
+			transform: translateY(-50%);
+			width: 56px;
+			height: 56px;
+			background: var(--nw-swiper-btn-bg);
+			border: 2px solid var(--nw-swiper-btn-border);
+			border-radius: 50%;
+			color: var(--nw-swiper-btn-text);
+			box-shadow: 0 4px 20px var(--nw-shadow);
+			--swiper-navigation-size: 24px;
+
+			&::after {
+				font-size: 24px;
+				font-weight: 700;
+				color: currentColor;
+			}
+
+			&:hover {
+				background: var(--nw-accent);
+				border-color: var(--nw-accent);
+				color: #fff;
+				box-shadow: 0 6px 24px rgba(255, 43, 43, 0.35);
+				transform: translateY(-50%) scale(1.08);
+				--swiper-navigation-color: #fff;
+
+				&::after {
+					color: #fff;
+				}
+			}
+		}
 	}
 }
 
@@ -345,6 +376,10 @@ body.mobile-nav-open {
 		line-height: 1.4;
 		color: var(--nw-text);
 		letter-spacing: 0.01em;
+
+		@include from(l) {
+			font-size: 1.125rem;
+		}
 	}
 }
 

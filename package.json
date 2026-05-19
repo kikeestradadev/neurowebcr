@@ -1,13 +1,14 @@
 {
 	"name": "neurowebcr",
 	"version": "1.0.0",
-	"description": "gh-pages link: https://kikeestradadev.github.io/neurowebcr",
+	"description": "gh-pages link: https://kikeestradadev.github.io/neurowebcr/",
 	"main": "public/index.html",
 	"homepage": "https://kikeestradadev.github.io/neurowebcr/",
 	"scripts": {
 		"build:sass": "npx sass src/styles/styles.scss src/styles/styles.css --no-source-map",
 		"build:css": "npm run build:sass && npx @tailwindcss/cli -i src/styles/tailwind.css -o public/tailwind-dist.css",
 		"build:pug": "node scripts/compile-pug.js",
+		"watch:pug": "node scripts/compile-pug.js --watch",
 		"build": "npm run build:css && npm run build:pug",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"deploy": "gh-pages -d public",

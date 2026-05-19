@@ -9,6 +9,10 @@
 	border: 1px solid var(--nw-band-border);
 	background: var(--nw-bg);
 	color: var(--nw-band-text-muted);
+
+	@include from(l) {
+		font-size: 0.875rem;
+	}
 }
 
 .portfolio-card,

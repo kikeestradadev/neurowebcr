@@ -18,12 +18,12 @@ footer.site-footer(class='section-band')
 				div(class='footer-social')
 					p(class='footer-label')= t.footer.socialLabel
 					div(class='footer-social__list')
-						a(href='javascript:void(0)' aria-label='Instagram')
-							span IG
-						a(href='javascript:void(0)' aria-label='LinkedIn')
-							span IN
-						a(href='javascript:void(0)' aria-label='GitHub')
-							span GH
+						a(href=t.footer.socialInstagram target='_blank' rel='noopener noreferrer' aria-label='Instagram')
+							+socialIconInstagram()
+						a(href=t.footer.socialLinkedIn target='_blank' rel='noopener noreferrer' aria-label='LinkedIn')
+							+socialIconLinkedIn()
+						a(href=t.footer.socialGitHub target='_blank' rel='noopener noreferrer' aria-label='GitHub')
+							+socialIconGitHub()
 
 			div(class='footer-bottom')
 				p(class='footer-bottom__url')

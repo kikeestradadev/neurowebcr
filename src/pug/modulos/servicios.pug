@@ -2,9 +2,9 @@ section(id='servicios' class='section-stripe relative py-20 l:py-28')
 	div(class='main-container')
 		div(class='container')
 			div(class='text-center max-w-2xl mx-auto mb-14 l:mb-20')
-				p(class='text-xs font-semibold uppercase tracking-[0.3em] text-nw-accent mb-3')= t.services.eyebrow
-				h2(class='text-3xl l:text-4xl font-bold uppercase tracking-tight text-nw-text')= t.services.title
-				p(class='font-secondary mt-4 text-nw-text-muted')= t.services.intro
+				p(class='text-xs l:text-sm font-semibold uppercase tracking-[0.3em] text-nw-accent mb-3')= t.services.eyebrow
+				h2(class='text-3xl l:text-5xl font-bold uppercase tracking-tight text-nw-text')= t.services.title
+				p(class='font-secondary mt-4 text-base l:text-lg text-nw-text-muted leading-relaxed')= t.services.intro
 
 			div(class='grid grid-cols-1 m:grid-cols-2 border border-nw-surface-muted rounded-2xl overflow-hidden shadow-card')
 				each service, index in t.services.items
@@ -22,5 +22,5 @@ section(id='servicios' class='section-stripe relative py-20 l:py-28')
 								span(class='text-xl text-nw-accent') ⚙
 							else
 								span(class='text-xl font-bold text-nw-accent') ↗
-						h3(class='text-lg font-bold uppercase tracking-wide mb-3 text-nw-text group-hover:text-nw-accent transition-colors')= service.title
-						p(class='font-secondary text-sm text-nw-text-muted leading-relaxed')= service.description
+						h3(class='text-lg l:text-xl font-bold uppercase tracking-wide mb-3 text-nw-text group-hover:text-nw-accent transition-colors')= service.title
+						p(class='font-secondary text-sm l:text-base text-nw-text-muted leading-relaxed')= service.description

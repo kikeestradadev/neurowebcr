@@ -17,28 +17,50 @@ const loadLocale = (code) => {
 	return JSON.parse(fs.readFileSync(file, 'utf8'));
 };
 
-for (const { code, outDir, assetBase } of LOCALES) {
-	const langHrefEs = code === 'es' ? './' : '../';
-	const langHrefEn = code === 'es' ? './en/' : './';
-	const t = loadLocale(code);
-	const portfolioItems = t.portfolio.items.map((item) => ({
-		...item,
-		image: assetBase + item.image,
-	}));
+const compileAll = () => {
+	for (const { code, outDir, assetBase } of LOCALES) {
+		const langHrefEs = code === 'es' ? './' : '../';
+		const langHrefEn = code === 'es' ? './en/' : './';
+		const t = loadLocale(code);
+		const portfolioItems = t.portfolio.items.map((item) => ({
+			...item,
+			image: assetBase + item.image,
+		}));
 
-	const html = pug.renderFile(input, {
-		pretty: true,
-		basedir,
-		locale: code,
-		t,
-		assetBase,
-		langHrefEs,
-		langHrefEn,
-		portfolioItems,
-	});
+		const html = pug.renderFile(input, {
+			pretty: true,
+			basedir,
+			locale: code,
+			t,
+			assetBase,
+			langHrefEs,
+			langHrefEn,
+			portfolioItems,
+		});
 
-	fs.mkdirSync(outDir, { recursive: true });
-	const output = path.join(outDir, 'index.html');
-	fs.writeFileSync(output, html);
-	console.log(`Pug [${code}] → ${output} (${html.length} bytes)`);
+		fs.mkdirSync(outDir, { recursive: true });
+		const output = path.join(outDir, 'index.html');
+		fs.writeFileSync(output, html);
+		console.log(`Pug [${code}] → ${output} (${html.length} bytes, ${portfolioItems.length} portfolio items)`);
+	}
+};
+
+compileAll();
+
+if (process.argv.includes('--watch')) {
+	console.log('Watching src/locales/*.json and src/pug/pages/index.pug…');
+	let timer;
+	const schedule = () => {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			try {
+				compileAll();
+			} catch (err) {
+				console.error(err.message);
+			}
+		}, 150);
+	};
+
+	fs.watch(localesDir, schedule);
+	fs.watch(input, schedule);
 }
