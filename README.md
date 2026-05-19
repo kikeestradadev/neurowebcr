@@ -162,6 +162,39 @@ npm run build
 - Si el servidor muestra `Unsupported engine` o error de `@tailwindcss/oxide`, no ejecutar build en servidor.
 - Flujo recomendado: `npm run build` en local + upload del contenido de `public/` a cPanel.
 
+### Troubleshooting Producción (aprendido)
+
+1. Si `https://neurowebcr.com/` abre, pero `/images/...` da `404`:
+   - Verifica que el dominio realmente apunte al docroot esperado.
+   - Prueba rápida:
+
+```bash
+echo "ok-neuro" > /home/ovalhost/neurowebcr/public/probe.txt
+curl -I https://neurowebcr.com/probe.txt
+```
+
+Si responde `200`, el docroot sí está bien.
+
+2. Si `probe.txt` responde `200` pero imágenes siguen en `404`, revisar permisos de carpetas públicas.
+   - En Linux, el servidor necesita permiso de ejecución en carpetas para poder entrar y servir archivos.
+   - Recomendado:
+
+```bash
+cd /home/ovalhost/neurowebcr/public
+find . -type d -exec chmod 755 {} \;
+find . -type f -exec chmod 644 {} \;
+```
+
+3. Verificación final:
+
+```bash
+curl -I https://neurowebcr.com/images/ico.png
+curl -I https://neurowebcr.com/images/logo_w_v.png
+curl -I https://neurowebcr.com/images/pf/mb.png
+```
+
+Deben responder `200`.
+
 ## GitHub Pages (deploy con Prepros)
 
 **No hay un “build” del proyecto en el repo.** Lo que se publica es la carpeta **`public/`** después de que Prepros (y, si aplica, `build:pug`) hayan generado ahí el HTML y el CSS.
