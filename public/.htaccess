@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Force canonical host and HTTPS: https://neurowebcr.com
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.neurowebcr\.com$ [NC]
+RewriteRule ^ https://neurowebcr.com%{REQUEST_URI} [R=301,L]
+
+# Ensure explicit content types for crawler-facing files
+AddType application/xml .xml
+AddType text/plain .txt
+

@@ -157,6 +157,17 @@ npm run build
    - `https://neurowebcr.com/`
    - `https://neurowebcr.com/en/`
 
+### Canonical host y protocolo (Search Console)
+
+Incluimos `public/.htaccess` para forzar redirección `301` a:
+
+- `https://neurowebcr.com` (sin `www`)
+
+Objetivo:
+- Evitar duplicidad entre `www` y `non-www`.
+- Mejorar consistencia de rastreo para sitemap/indexación.
+- Alinear host canónico con `canonical`, `hreflang` y sitemap.
+
 ### Nota para Shared Hosting
 
 - Si el servidor muestra `Unsupported engine` o error de `@tailwindcss/oxide`, no ejecutar build en servidor.
