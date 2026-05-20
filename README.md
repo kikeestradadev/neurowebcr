@@ -79,7 +79,7 @@ La landing se genera en **dos versiones** al compilar Pug:
 
 **Selector:** botón **ES / EN** en el header (enlaces entre ambas versiones).
 
-**Build:** `npm run build:pug` compila las dos páginas. En GitHub Pages: `https://tu-usuario.github.io/neurowebcr/` y `.../neurowebcr/en/`.
+**Build:** `npm run build:pug` compila las dos páginas.
 
 ## Pug
 
@@ -231,7 +231,7 @@ npm run deploy
 
 Eso sube **solo** `public/` a la rama `gh-pages`. No ejecuta Sass ni Pug por ti.
 
-**URLs:** https://heroeskq3.github.io/neurowebcr/ y https://heroeskq3.github.io/neurowebcr/en/
+**URLs (ejemplo):** `https://tu-usuario.github.io/neurowebcr/` y `https://tu-usuario.github.io/neurowebcr/en/`
 
 ### Si ves 404
 
