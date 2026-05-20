@@ -248,6 +248,18 @@ Eso sube **solo** `public/` a la rama `gh-pages`. No ejecuta Sass ni Pug por ti.
 
 No mezcles ambos sin coordinar: si usas Prepros, despliega con `npm run deploy` después de compilar; no hace falta que Actions compile por ti.
 
+## Práctica Git recomendada (producción)
+
+Si el servidor de producción hace `git pull` desde `main`, evita reescribir historial en `main` (`rebase` + `push --force`).
+
+Riesgo:
+- El siguiente `git pull` en producción puede fallar o requerir realineación manual del árbol.
+
+Recomendado:
+1. Trabajar en ramas por feature/fix.
+2. Hacer merge a `main` sin reescribir historial ya publicado.
+3. Si se requiere limpiar historial, hacerlo antes de publicar o en ramas no usadas por producción.
+
 ## SEO técnico (estado actual)
 
 ### Implementado
