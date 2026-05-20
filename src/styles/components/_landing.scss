@@ -1,4 +1,4 @@
-// Estilos de landing (usan tokens --nw-* del tema)
+// Landing styles (use theme --nw-* tokens)
 
 .site-header {
 	background-color: var(--nw-header-bg);
@@ -419,7 +419,7 @@ body.mobile-nav-open {
 	opacity: 0;
 }
 
-// Franjas de sección (alternancia bg → alt → band)
+// Section stripes (bg → alt → band alternation)
 .section-base {
 	background-color: var(--nw-bg);
 }
@@ -437,7 +437,7 @@ body.mobile-nav-open {
 	color: var(--nw-band-text-muted);
 }
 
-// Separadores visibles entre bloques en modo oscuro
+// Visible separators between blocks in dark mode
 [data-theme="dark"] {
 	#inicio {
 		border-bottom: 1px solid rgba(255, 255, 255, 0.1);

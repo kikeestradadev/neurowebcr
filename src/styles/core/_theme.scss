@@ -2,7 +2,7 @@
 
 // =============================================================================
 // NeuroWebCR — Design tokens (Light / Dark)
-// Fuente única de verdad para variables CSS consumidas por Sass, Tailwind y JS
+// Single source of truth for CSS variables consumed by Sass, Tailwind, and JS
 // =============================================================================
 
 $nw-accent: #ff2b2b;
@@ -34,7 +34,7 @@ $light: (
 	"swiper-bullet": #cccccc,
 );
 
-// --- Dark theme (franjas alternas: bg → section-alt → band) ---
+// --- Dark theme (alternating stripes: bg → section-alt → band) ---
 $dark: (
 	"bg": #060606,
 	"section-alt": #131313,
@@ -82,7 +82,7 @@ $dark: (
 	--nw-swiper-btn-border: #{map.get($tokens, "swiper-btn-border")};
 	--nw-swiper-btn-text: #{map.get($tokens, "swiper-btn-text")};
 	--nw-swiper-bullet: #{map.get($tokens, "swiper-bullet")};
-	// Aliases legacy (nav-link, etc.)
+	// Legacy aliases (nav-link, etc.)
 	--color-bg: var(--nw-bg);
 	--color-surface: var(--nw-surface);
 	--color-surface-alt: var(--nw-surface-muted);
@@ -114,7 +114,7 @@ $dark: (
 	}
 }
 
-// Transición suave al cambiar tema
+// Smooth transition while switching theme
 html.theme-transition,
 html.theme-transition *,
 html.theme-transition *::before,

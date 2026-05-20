@@ -1,198 +1,186 @@
 # NeuroWebCR — Landing Page
 
-Landing corporativa con **tema light / dark**, Pug modular, Sass, Tailwind CSS 4 y Swiper.
+Corporate landing page built with **light/dark theme**, modular Pug, Sass, Tailwind CSS 4, and Swiper.
 
 **Demo:** https://neurowebcr.com/
 
-## Stack y flujo (Prepros)
+## Stack and Build Flow (Prepros)
 
-```
-src/pug/          →  public/index.html     (Pug)
-src/styles/       →  styles.css            (Sass / Prepros)
+```text
+src/pug/          →  public/index.html        (Pug)
+src/styles/       →  styles.css               (Sass / Prepros)
 tailwind.css      →  public/tailwind-dist.css (Tailwind CLI)
-src/js/           →  public/index-dist.js  (Prepros / bundler)
-public/site.js    →  tema + menú + Swiper  (copiar o enlazar desde build)
+src/js/           →  public/index-dist.js     (Prepros / bundler)
+public/site.js    →  theme + menu + Swiper
 ```
 
-### Orden en Prepros (tu flujo habitual)
+### Prepros Order (recommended flow)
 
 1. `src/styles/styles.scss` → `src/styles/styles.css`
 2. `src/styles/tailwind.css` → `public/tailwind-dist.css`
 3. `src/pug/pages/index.pug` → `public/index.html`
 
-Prepros **no** genera `public/en/index.html` solo. Para inglés, una vez por sesión:
+Prepros does **not** generate `public/en/index.html` automatically. Run once per session:
 
 ```bash
 npm run build:pug
 ```
 
-(Opcional: los scripts `npm run build*` son alternativa por terminal; **no son obligatorios** si usas Prepros.)
+`npm run build*` scripts are optional if you prefer terminal-based builds.
 
-## Estructura de temas
+## Theme Structure
 
-| Archivo | Rol |
-|---------|-----|
-| `src/styles/core/_theme.scss` | Tokens CSS `--nw-*` (light / dark) |
-| `src/styles/components/_logo.scss` | Visibilidad logo b/w por tema |
-| `src/styles/components/_theme-toggle.scss` | Botón sol/luna |
-| `src/js/core-modules/themeModule.js` | Lógica tema (módulos ES) |
-| `public/site.js` | Misma lógica para deploy sin bundler |
-| `src/pug/config/_branding.pug` | Rutas de logos |
-| `src/pug/mixins/logo.pug` | Mixins `+logoHorizontal`, etc. |
-| `src/pug/mixins/theme-toggle.pug` | Mixin `+themeToggle` |
+| File | Role |
+|------|------|
+| `src/styles/core/_theme.scss` | CSS tokens `--nw-*` (light/dark) |
+| `src/styles/components/_logo.scss` | Theme-based logo visibility |
+| `src/styles/components/_theme-toggle.scss` | Sun/moon toggle styles |
+| `src/js/core-modules/themeModule.js` | Theme logic (ES modules) |
+| `public/site.js` | Runtime logic for deploy without bundler |
+| `src/pug/config/_branding.pug` | Logo paths |
+| `src/pug/mixins/logo.pug` | `+logoHorizontal`, etc. |
+| `src/pug/mixins/theme-toggle.pug` | `+themeToggle` |
 
 ### Logos (`public/images/`)
 
-| Archivo | Uso |
-|---------|-----|
-| `logo_b_h.png` | Negro horizontal → **tema light** (header) |
-| `logo_b_v.png` | Negro vertical → watermark hero en light |
-| `logo_w_h.png` | Blanco horizontal → **tema dark** / footer |
-| `logo_w_v.png` | Blanco vertical → watermark hero en dark |
+| File | Usage |
+|------|------|
+| `logo_b_h.png` | Black horizontal logo (light theme header) |
+| `logo_b_v.png` | Black vertical watermark (light hero) |
+| `logo_w_h.png` | White horizontal logo (dark theme/footer) |
+| `logo_w_v.png` | White vertical watermark (dark hero) |
 
-### Clases Tailwind semánticas
+### Semantic Tailwind Classes
 
-Usar siempre tokens que responden al tema:
+Use token-driven classes:
 
 - `bg-nw-bg`, `bg-nw-surface`, `text-nw-text`, `text-nw-text-muted`
 - `bg-nw-accent`, `border-nw-surface-muted`
-- `section-band` → portafolio y footer (banda de contraste)
+- `section-band` for portfolio/footer contrast section
 
-Evitar `bg-white`, `text-black` fijos salvo excepciones (ej. botón WhatsApp verde).
+Avoid fixed `bg-white` / `text-black` unless intentionally required.
 
-### Persistencia
+### Persistence
 
-- `localStorage` clave: `nw-theme` (`light` | `dark`)
-- Sin valor guardado → respeta `prefers-color-scheme`
-- Script inline en `<head>` evita flash al cargar
+- `localStorage` key: `nw-theme` (`light` | `dark`)
+- If no stored value exists, `prefers-color-scheme` is used
+- Inline `<head>` script prevents theme flash
 
-## Idiomas (ES / EN)
+## Languages (ES / EN)
 
-La landing se genera en **dos versiones** al compilar Pug:
+The landing is generated in two language variants:
 
-| Idioma | URL local | Archivo |
-|--------|-----------|---------|
-| Español | `/` | `public/index.html` |
+| Language | Local URL | Output |
+|----------|-----------|--------|
+| Spanish | `/` | `public/index.html` |
 | English | `/en/` | `public/en/index.html` |
 
-**Textos:** edita `src/locales/es.json` y `src/locales/en.json` (nav, hero, servicios, portafolio, contacto, footer).
+Content source:
 
-**Selector:** botón **ES / EN** en el header (enlaces entre ambas versiones).
+- `src/locales/es.json`
+- `src/locales/en.json`
 
-**Build:** `npm run build:pug` compila las dos páginas.
+Build:
 
-## Pug
-
+```bash
+npm run build:pug
 ```
+
+## Pug Layout
+
+```text
 src/pug/
 ├── config/
-│   ├── template.pug      ← layout base (extends)
-│   └── _branding.pug     ← rutas logos
+│   ├── template.pug
+│   └── _branding.pug
 ├── mixins/
 │   ├── logo.pug
 │   └── theme-toggle.pug
-├── modulos/              ← secciones de la landing
+├── modulos/
 └── pages/
-    └── index.pug         ← ensambla módulos
+    └── index.pug
 ```
 
-Variables globales (WhatsApp, email, año): bloque `append config` en `index.pug`. Traducciones: `src/locales/*.json`.
+Global variables (WhatsApp, email, current year) are defined in `index.pug` (`append config` block).
 
-## Scripts npm
+## NPM Scripts
 
 ```bash
-npm install          # solo la primera vez (para deploy y build:pug)
-npm run build:pug    # ES + EN → public/index.html y public/en/index.html
-npm run deploy       # sube la carpeta public/ tal como está (sin compilar)
-npm run deploy:full  # opcional: npm run build + deploy (sin Prepros)
+npm install
+npm run build:pug
+npm run deploy
+npm run deploy:full
 ```
 
-## Dev Environment (XAMPP localhost)
+## Local Dev Environment (XAMPP)
 
-Ruta local esperada:
+Expected local path:
 
 ```bash
 /Applications/XAMPP/xamppfiles/htdocs/neurowebcr
 ```
 
-### Build local
+### Local build
 
 ```bash
 npm run build
 ```
 
-Resultado esperado:
+Expected output:
 
 - `public/index.html`
 - `public/en/index.html`
 - `public/tailwind-dist.css`
 
-Notas:
+Notes:
 
-- Warnings de Sass (`@import`, `type-of`, `map-get`) y Node (`MODULE_TYPELESS_PACKAGE_JSON`) pueden aparecer.
-- Esos warnings **no bloquean** el build actual ni el deploy.
+- Sass deprecation warnings and Node module-type warnings may appear.
+- Warnings do not block current build/deploy flow.
 
-### URL local
+### Local URLs
 
-- `http://localhost/neurowebcr` puede mostrar listado de carpeta (según Apache).
-- URL funcional de la landing en este setup: `http://localhost/neurowebcr/public/`
-- Inglés: `http://localhost/neurowebcr/public/en/`
+- `http://localhost/neurowebcr` may show a directory listing depending on Apache config.
+- Landing URL: `http://localhost/neurowebcr/public/`
+- English: `http://localhost/neurowebcr/public/en/`
 
-## Deploy a Producción (cPanel / Apache)
+## Production Deploy (cPanel / Apache)
 
-Para `https://neurowebcr.com/`, usar solo el contenido generado en `public/`.
-Este proyecto usa Tailwind 4 (requiere Node >= 20 para compilar), por lo que en shared hosting con Node 16 se debe compilar en local.
+Use generated assets from `public/` for `https://neurowebcr.com/`.
 
-1. Compilar local:
+1. Build locally:
 
 ```bash
 npm install
 npm run build
 ```
 
-2. En cPanel (`File Manager`), abrir la carpeta raíz del dominio (`public_html` o la asignada a `neurowebcr.com`).
-3. Subir el **contenido de `public/`** directamente a esa raíz (no la carpeta `public`, sino lo que está dentro).
-4. Verificar que existan en raíz: `index.html`, `en/`, `tailwind-dist.css`, `site.js`, `images/`.
-5. Probar:
+2. In cPanel File Manager, open domain docroot (`public_html` or mapped docroot).
+3. Upload **contents of `public/`** to docroot (not the `public` folder itself).
+4. Verify presence of: `index.html`, `en/`, `tailwind-dist.css`, `site.js`, `images/`.
+5. Test:
    - `https://neurowebcr.com/`
    - `https://neurowebcr.com/en/`
 
-### Canonical host y protocolo (Search Console)
+### Canonical host and protocol (Search Console)
 
-Incluimos `public/.htaccess` para forzar redirección `301` de forma dinámica:
+`public/.htaccess` applies dynamic `301` behavior:
 
-- Forzar `https` sobre el host actual.
-- Normalizar host removiendo `www.` (sin dominio hardcodeado).
+- force HTTPS on current host
+- normalize host by removing `www.`
+- no hardcoded domain
 
-Objetivo:
-- Evitar duplicidad entre `www` y `non-www`.
-- Mejorar consistencia de rastreo para sitemap/indexación.
-- Alinear host canónico con `canonical`, `hreflang` y sitemap sin amarrar el proyecto a un dominio específico.
+Local bypass:
 
-Nota:
-- En desarrollo local (`localhost`, `127.0.0.1`) la redirección canónica está desactivada para no enviar tráfico a producción.
+- redirects are disabled on `localhost` and `127.0.0.1`
 
-### Nota para Shared Hosting
+### Shared Hosting Note
 
-- Si el servidor muestra `Unsupported engine` o error de `@tailwindcss/oxide`, no ejecutar build en servidor.
-- Flujo recomendado: `npm run build` en local + upload del contenido de `public/` a cPanel.
+If server runtime is incompatible (for example Tailwind 4 build requirements), do not build on server. Build locally, then upload artifacts.
 
-### Troubleshooting Producción (aprendido)
+### Production Troubleshooting
 
-1. Si `https://neurowebcr.com/` abre, pero `/images/...` da `404`:
-   - Verifica que el dominio realmente apunte al docroot esperado.
-   - Prueba rápida:
-
-```bash
-echo "ok-neuro" > /home/ovalhost/neurowebcr/public/probe.txt
-curl -I https://neurowebcr.com/probe.txt
-```
-
-Si responde `200`, el docroot sí está bien.
-
-2. Si `probe.txt` responde `200` pero imágenes siguen en `404`, revisar permisos de carpetas públicas.
-   - En Linux, el servidor necesita permiso de ejecución en carpetas para poder entrar y servir archivos.
-   - Recomendado:
+1. If homepage is up but images return `404`, confirm docroot mapping first.
+2. If docroot is correct, validate file and directory permissions:
 
 ```bash
 cd /home/ovalhost/neurowebcr/public
@@ -200,7 +188,7 @@ find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
 ```
 
-3. Verificación final:
+3. Validate with:
 
 ```bash
 curl -I https://neurowebcr.com/images/ico.png
@@ -208,138 +196,121 @@ curl -I https://neurowebcr.com/images/logo_w_v.png
 curl -I https://neurowebcr.com/images/pf/mb.png
 ```
 
-Deben responder `200`.
+## GitHub Pages (Prepros deploy flow)
 
-## GitHub Pages (deploy con Prepros)
+Deploy publishes the `public/` directory output.
 
-**No hay un “build” del proyecto en el repo.** Lo que se publica es la carpeta **`public/`** después de que Prepros (y, si aplica, `build:pug`) hayan generado ahí el HTML y el CSS.
+### Pre-deploy checklist
 
-### Checklist antes de `npm run deploy`
-
-1. Prepros compiló sin errores (Sass + Tailwind + Pug).
-2. Existen y están actualizados:
+1. Prepros completed Sass + Tailwind + Pug without errors.
+2. Updated outputs exist:
    - `public/index.html`
    - `public/tailwind-dist.css`
    - `public/site.js`
    - `public/images/`
-   - `public/en/index.html` (tras `npm run build:pug`)
-3. Repo **público** y Pages activado (ver abajo).
+   - `public/en/index.html`
+3. Repository visibility and Pages settings are valid.
+
+Deploy:
 
 ```bash
 npm run deploy
 ```
 
-Eso sube **solo** `public/` a la rama `gh-pages`. No ejecuta Sass ni Pug por ti.
+Example URLs:
 
-**URLs (ejemplo):** `https://tu-usuario.github.io/neurowebcr/` y `https://tu-usuario.github.io/neurowebcr/en/`
+- `https://<your-user>.github.io/neurowebcr/`
+- `https://<your-user>.github.io/neurowebcr/en/`
 
-### Si ves 404
+## Recommended Git Practice (production)
 
-1. **Activar Pages** (lo debe hacer el dueño del repo en GitHub): **Settings → Pages** → rama **`gh-pages`**, carpeta **`/ (root)`**  
-   O bien: Source = **GitHub Actions** (compila en la nube con `npm run build`; distinto al flujo Prepros).
-2. Esperar 1–5 minutos y recargar.
+If production servers run `git pull` from `main`, avoid rewriting published `main` history (`rebase` + `push --force`).
 
-### GitHub Actions vs Prepros
+Recommended:
 
-| Método | Quién compila | Cuándo usarlo |
-|--------|----------------|---------------|
-| **Prepros + `npm run deploy`** | Tú en tu Mac | Tu flujo actual |
-| **Push a `main` + Actions** | GitHub (`npm run build`) | Si no usas Prepros en el equipo |
+1. Work in feature/fix branches.
+2. Merge to `main` without rewriting published history.
+3. Perform history cleanup only before publication or on non-production branches.
 
-No mezcles ambos sin coordinar: si usas Prepros, despliega con `npm run deploy` después de compilar; no hace falta que Actions compile por ti.
+## SEO Technical Status
 
-## Práctica Git recomendada (producción)
+### Implemented
 
-Si el servidor de producción hace `git pull` desde `main`, evita reescribir historial en `main` (`rebase` + `push --force`).
-
-Riesgo:
-- El siguiente `git pull` en producción puede fallar o requerir realineación manual del árbol.
-
-Recomendado:
-1. Trabajar en ramas por feature/fix.
-2. Hacer merge a `main` sin reescribir historial ya publicado.
-3. Si se requiere limpiar historial, hacerlo antes de publicar o en ramas no usadas por producción.
-
-## SEO técnico (estado actual)
-
-### Implementado
-
-- Meta base:
+- Core metadata:
   - `title`
   - `meta description`
   - `meta robots="index,follow,max-image-preview:large"`
-- Internacionalización SEO:
-  - `canonical` absoluto por idioma (`/` y `/en/`)
-  - `hreflang` (`es`, `en`, `x-default`)
-- Social meta:
-  - Open Graph: `og:title`, `og:site_name`, `og:description`, `og:type`, `og:url`, `og:image`, `og:locale`, `og:locale:alternate`
-  - Twitter: `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
-  - `twitter:site` y `twitter:creator` listos para activarse cuando se definan handles reales
-- Medición:
-  - Google Analytics 4 (`gtag.js`) instalado globalmente con ID `G-3GGD52GQ13` en la plantilla base
-  - Consent Mode v2 configurado con estado por defecto `denied` para usuarios del EEE
-  - Tracking de funnel y CTAs en `public/site.js`
-- Datos estructurados (`JSON-LD`):
+- International SEO:
+  - absolute canonical URLs per language
+  - hreflang: `es`, `en`, `x-default`
+- Social metadata:
+  - Open Graph (`og:title`, `og:site_name`, `og:description`, `og:type`, `og:url`, `og:image`, `og:locale`, `og:locale:alternate`)
+  - Twitter (`twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`)
+- Analytics:
+  - GA4 (`G-3GGD52GQ13`)
+  - Consent Mode v2 default setup for EEA
+  - funnel tracking in `public/site.js`
+- Structured data (JSON-LD):
   - `Organization`
   - `ProfessionalService`
-  - `ContactPoint` (dentro de `ProfessionalService`)
+  - `ContactPoint`
   - `WebSite`
   - `WebPage`
-  - `Service` (uno por servicio principal del landing)
-- Indexación:
+  - `Service` entries per service block
+- Indexation artifacts:
   - `public/robots.txt`
-  - `public/sitemap.xml` con versiones ES/EN y `x-default`
+  - `public/sitemap.xml` with ES/EN/x-default
 
-### Archivos SEO clave
+### Key SEO files
 
-- Plantilla SEO: `src/pug/config/template.pug`
-- Compilación Pug + URLs absolutas: `scripts/compile-pug.js`
-- Generación de `robots.txt` y `sitemap.xml`: `scripts/generate-seo-files.js`
-- Script build integrado: `package.json` (`build:seo` y `build`)
+- `src/pug/config/template.pug`
+- `scripts/compile-pug.js`
+- `scripts/generate-seo-files.js`
+- `package.json` (`build`, `build:seo`)
 
-### Cómo se construye SEO
+### SEO build command
 
 ```bash
 npm run build
 ```
 
-Este comando:
-1. Compila CSS
-2. Compila Pug (ES/EN)
-3. Genera `public/robots.txt` y `public/sitemap.xml`
+Execution pipeline:
 
-### Dominio canónico (`SITE_URL`)
+1. CSS build
+2. Pug compile (ES/EN)
+3. robots/sitemap generation
 
-La URL base SEO se toma de:
-1. Variable de entorno `SITE_URL` (prioridad alta)
-2. `homepage` en `package.json`
-3. Fallback: `https://neurowebcr.com`
+### Canonical domain source (`SITE_URL`)
 
-Ejemplo para producción:
+Resolution order:
+
+1. `SITE_URL` environment variable
+2. `homepage` in `package.json`
+3. fallback `https://neurowebcr.com`
+
+Example:
 
 ```bash
 SITE_URL="https://neurowebcr.com" npm run build
 ```
 
-### Pendientes SEO (acordados)
+### SEO pending items
 
-1. Definir perfiles reales de marca para `sameAs` (Instagram, LinkedIn, GitHub, etc.).
-2. Definir `twitter:site` y `twitter:creator` reales en locales:
-   - `src/locales/es.json`
-   - `src/locales/en.json`
-3. (Pendiente separado) Optimización de imágenes para Core Web Vitals.
-4. Integrar banner/CMP de cookies que dispare actualización de consentimiento (`gtag('consent', 'update', ...)`) según elección del usuario.
+1. Set real social profile URLs for `sameAs`.
+2. Set real `twitter:site` and `twitter:creator` handles in locale files.
+3. Optimize images for Core Web Vitals.
+4. Integrate CMP/banner with runtime `gtag('consent', 'update', ...)`.
 
-### Consent Mode v2 (GA4)
+### Consent Mode v2
 
-La plantilla aplica por defecto en EEE:
+Default state in EEA:
 
 - `ad_storage: denied`
 - `analytics_storage: denied`
 - `ad_user_data: denied`
 - `ad_personalization: denied`
 
-Cuando el usuario acepte cookies, el banner/CMP debe ejecutar:
+Grant example:
 
 ```js
 gtag('consent', 'update', {
@@ -350,9 +321,7 @@ gtag('consent', 'update', {
 });
 ```
 
-Si rechaza, mantener `denied`.
-
-### Validación rápida local
+### Local validation commands
 
 ```bash
 rg -n "canonical|hreflang|og:|twitter:|application/ld\\+json|meta name=\"robots\"" public/index.html public/en/index.html
@@ -360,26 +329,21 @@ cat public/robots.txt
 cat public/sitemap.xml
 ```
 
-### Eventos de funnel (GA4)
+### Funnel events (GA4)
 
-Implementados en `public/site.js`:
+Implemented in `public/site.js`:
 
 - `navigation_click`
-  - Dispara en menú principal y móvil (`.nav-link`, `.mobile-nav-link`).
-- `generate_lead`
-  - Dispara para clics a WhatsApp (`a[href*="wa.me"]`).
-  - Dispara para clics a email (`a[href^="mailto:"]`).
-- `select_content`
-  - Dispara al hacer clic en proyectos de portafolio (`.portfolio-card--link`).
-- `view_section`
-  - Dispara una vez por sección al entrar en viewport (IntersectionObserver, `section[id]`).
+- `generate_lead` (WhatsApp and email actions)
+- `select_content` (portfolio item clicks)
+- `view_section` (section visibility via IntersectionObserver)
 
-Parámetros base enviados:
+Base parameters:
 
 - `page_lang`
 - `page_path`
 
-Parámetros adicionales según evento:
+Additional parameters by event:
 
 - `link_text`, `link_target`
 - `lead_type`, `cta_text`, `link_url`

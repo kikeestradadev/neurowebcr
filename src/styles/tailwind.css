@@ -4,7 +4,7 @@
 @source "../pug/**/*.pug";
 @source "../../public/index.html";
 
-/* Tokens semánticos — responden a data-theme vía CSS variables */
+/* Semantic tokens — respond to data-theme via CSS variables */
 @theme inline {
 	--color-nw-bg: var(--nw-bg);
 	--color-nw-section-alt: var(--nw-section-alt);

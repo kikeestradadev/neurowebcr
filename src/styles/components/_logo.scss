@@ -1,4 +1,4 @@
-// Logos en header/footer — contenedor con altura fija (arte horizontal ~6.7:1)
+// Header/footer logos — fixed-height container (horizontal art ~6.7:1)
 
 .logo {
 	--logo-h: 2.25rem;
@@ -55,7 +55,7 @@
 	}
 }
 
-// Watermark hero (fuera de .logo — solo alternar visibilidad)
+// Hero watermark (outside .logo — visibility toggle only)
 img.hero-watermark.logo__img--dark {
 	display: none;
 }

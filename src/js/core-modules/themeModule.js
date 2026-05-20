@@ -56,7 +56,7 @@ const themeModule = () => {
 		});
 };
 
-/** Para script inline en head (evitar flash de tema incorrecto) */
+/** For inline script in <head> (prevent incorrect theme flash) */
 export const themeInitScript = `!(function(){try{var t=localStorage.getItem('${STORAGE_KEY}');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','light')}})();`;
 
 export default themeModule;
