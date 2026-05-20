@@ -159,14 +159,18 @@ npm run build
 
 ### Canonical host y protocolo (Search Console)
 
-Incluimos `public/.htaccess` para forzar redirección `301` a:
+Incluimos `public/.htaccess` para forzar redirección `301` de forma dinámica:
 
-- `https://neurowebcr.com` (sin `www`)
+- Forzar `https` sobre el host actual.
+- Normalizar host removiendo `www.` (sin dominio hardcodeado).
 
 Objetivo:
 - Evitar duplicidad entre `www` y `non-www`.
 - Mejorar consistencia de rastreo para sitemap/indexación.
-- Alinear host canónico con `canonical`, `hreflang` y sitemap.
+- Alinear host canónico con `canonical`, `hreflang` y sitemap sin amarrar el proyecto a un dominio específico.
+
+Nota:
+- En desarrollo local (`localhost`, `127.0.0.1`) la redirección canónica está desactivada para no enviar tráfico a producción.
 
 ### Nota para Shared Hosting
 
