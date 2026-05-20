@@ -251,6 +251,7 @@ No mezcles ambos sin coordinar: si usas Prepros, despliega con `npm run deploy` 
 - Medición:
   - Google Analytics 4 (`gtag.js`) instalado globalmente con ID `G-3GGD52GQ13` en la plantilla base
   - Consent Mode v2 configurado con estado por defecto `denied` para usuarios del EEE
+  - Tracking de funnel y CTAs en `public/site.js`
 - Datos estructurados (`JSON-LD`):
   - `Organization`
   - `ProfessionalService`
@@ -329,3 +330,29 @@ rg -n "canonical|hreflang|og:|twitter:|application/ld\\+json|meta name=\"robots\
 cat public/robots.txt
 cat public/sitemap.xml
 ```
+
+### Eventos de funnel (GA4)
+
+Implementados en `public/site.js`:
+
+- `navigation_click`
+  - Dispara en menú principal y móvil (`.nav-link`, `.mobile-nav-link`).
+- `generate_lead`
+  - Dispara para clics a WhatsApp (`a[href*="wa.me"]`).
+  - Dispara para clics a email (`a[href^="mailto:"]`).
+- `select_content`
+  - Dispara al hacer clic en proyectos de portafolio (`.portfolio-card--link`).
+- `view_section`
+  - Dispara una vez por sección al entrar en viewport (IntersectionObserver, `section[id]`).
+
+Parámetros base enviados:
+
+- `page_lang`
+- `page_path`
+
+Parámetros adicionales según evento:
+
+- `link_text`, `link_target`
+- `lead_type`, `cta_text`, `link_url`
+- `content_type`, `item_name`, `item_category`
+- `section_id`

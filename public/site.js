@@ -166,8 +166,84 @@
 			.forEach((link) => tryNext(link, 'href'));
 	};
 
+	const fireGAEvent = (eventName, params) => {
+		if (typeof window.gtag !== 'function') return;
+		window.gtag('event', eventName, params || {});
+	};
+
+	const textFromNode = (node) => (node?.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120);
+
+	const initFunnelTracking = () => {
+		const pageLang = document.documentElement.lang || 'es';
+		const pagePath = window.location.pathname;
+
+		const trackClick = (selector, eventName, buildParams) => {
+			document.querySelectorAll(selector).forEach((el) => {
+				el.addEventListener('click', () => {
+					const params = typeof buildParams === 'function' ? buildParams(el) : {};
+					fireGAEvent(eventName, {
+						page_lang: pageLang,
+						page_path: pagePath,
+						...params,
+					});
+				});
+			});
+		};
+
+		trackClick('.nav-link, .mobile-nav-link', 'navigation_click', (el) => ({
+			link_text: textFromNode(el),
+			link_target: el.getAttribute('href') || '',
+		}));
+
+		trackClick('a[href*="wa.me"]', 'generate_lead', (el) => ({
+			lead_type: 'whatsapp',
+			cta_text: textFromNode(el) || 'whatsapp',
+			link_url: el.href || '',
+		}));
+
+		trackClick('a[href^="mailto:"]', 'generate_lead', (el) => ({
+			lead_type: 'email',
+			cta_text: textFromNode(el) || 'email',
+			link_url: el.href || '',
+		}));
+
+		trackClick('.portfolio-card--link', 'select_content', (el) => {
+			const title = textFromNode(el.querySelector('h3'));
+			const category = textFromNode(el.querySelector('p'));
+			return {
+				content_type: 'portfolio_project',
+				item_name: title || 'project',
+				item_category: category || '',
+				link_url: el.href || '',
+			};
+		});
+
+		const sections = document.querySelectorAll('section[id]');
+		if ('IntersectionObserver' in window && sections.length) {
+			const seen = new Set();
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						const id = entry.target.id;
+						if (!id || seen.has(id)) return;
+						seen.add(id);
+						fireGAEvent('view_section', {
+							page_lang: pageLang,
+							page_path: pagePath,
+							section_id: id,
+						});
+					});
+				},
+				{ threshold: 0.5 }
+			);
+			sections.forEach((section) => observer.observe(section));
+		}
+	};
+
 	initAssetFallbacks();
 	initTheme();
 	initMobileMenu();
 	initPortfolioSwiper();
+	initFunnelTracking();
 })();
