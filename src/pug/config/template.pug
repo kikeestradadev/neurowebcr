@@ -83,6 +83,18 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 				].includes(normalized);
 			});
 			const businessType = (t.seo && t.seo.businessType) || "ProfessionalService";
+			const serviceCatalog = ((t.services && t.services.items) || []).map((service, index) => ({
+				"@type": "Service",
+				"@id": siteUrl + "/#service-" + (index + 1),
+				"serviceType": service.title,
+				"name": service.title,
+				"description": service.description,
+				"provider": {
+					"@id": siteUrl + "/#business"
+				},
+				"areaServed": (t.seo && t.seo.areaServed) || ["Costa Rica"],
+				"availableLanguage": (t.seo && t.seo.availableLanguage) || [locale]
+			}));
 			const schemaGraph = {
 				"@context": "https://schema.org",
 				"@graph": [
@@ -103,6 +115,15 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 						"description": pageDescription,
 						"telephone": "+50670118183",
 						"email": "hola@neurowebcr.com",
+						"contactPoint": [
+							{
+								"@type": "ContactPoint",
+								"contactType": "customer support",
+								"telephone": "+50670118183",
+								"email": "hola@neurowebcr.com",
+								"availableLanguage": (t.seo && t.seo.availableLanguage) || [locale]
+							}
+						],
 						"areaServed": (t.seo && t.seo.areaServed) || ["Costa Rica"],
 						"availableLanguage": (t.seo && t.seo.availableLanguage) || [locale],
 						"serviceType": (t.seo && t.seo.serviceType) || [],
@@ -133,7 +154,7 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 							"@id": siteUrl + "/#business"
 						}
 					}
-				]
+				].concat(serviceCatalog)
 			}
 		script(type="application/ld+json")
 			!= JSON.stringify(schemaGraph)

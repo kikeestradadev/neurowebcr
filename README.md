@@ -255,8 +255,10 @@ No mezcles ambos sin coordinar: si usas Prepros, despliega con `npm run deploy` 
 - Datos estructurados (`JSON-LD`):
   - `Organization`
   - `ProfessionalService`
+  - `ContactPoint` (dentro de `ProfessionalService`)
   - `WebSite`
   - `WebPage`
+  - `Service` (uno por servicio principal del landing)
 - Indexación:
   - `public/robots.txt`
   - `public/sitemap.xml` con versiones ES/EN y `x-default`
