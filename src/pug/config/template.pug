@@ -86,15 +86,23 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 			const serviceCatalog = ((t.services && t.services.items) || []).map((service, index) => ({
 				"@type": "Service",
 				"@id": siteUrl + "/#service-" + (index + 1),
-				"serviceType": service.title,
 				"name": service.title,
 				"description": service.description,
 				"provider": {
 					"@id": siteUrl + "/#business"
 				},
-				"areaServed": (t.seo && t.seo.areaServed) || ["Costa Rica"],
-				"availableLanguage": (t.seo && t.seo.availableLanguage) || [locale]
+				"areaServed": (t.seo && t.seo.areaServed) || ["Costa Rica"]
 			}));
+			const offerCatalog = {
+				"@type": "OfferCatalog",
+				"name": (t.services && t.services.title) || "Services",
+				"itemListElement": serviceCatalog.map((service) => ({
+					"@type": "Offer",
+					"itemOffered": {
+						"@id": service["@id"]
+					}
+				}))
+			};
 			const schemaGraph = {
 				"@context": "https://schema.org",
 				"@graph": [
@@ -125,8 +133,7 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 							}
 						],
 						"areaServed": (t.seo && t.seo.areaServed) || ["Costa Rica"],
-						"availableLanguage": (t.seo && t.seo.availableLanguage) || [locale],
-						"serviceType": (t.seo && t.seo.serviceType) || [],
+						"hasOfferCatalog": offerCatalog,
 						...(socialProfiles.length ? { "sameAs": socialProfiles } : {}),
 						"address": {
 							"@type": "PostalAddress",
