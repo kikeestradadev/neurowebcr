@@ -5,7 +5,7 @@
     <html lang="en">
       <head>
         <meta charset="UTF-8"/>
-        <title>Sitemap - NeuroWebCR</title>
+        <title>Sitemap - NeuroWeb Costa Rica</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 2rem; color: #111; }
           table { border-collapse: collapse; width: 100%; max-width: 980px; }

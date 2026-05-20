@@ -14,7 +14,7 @@
 		"serviceType": ["Web Development", "AI Agents", "Automation", "Digital Solutions"]
 	},
 	"whatsapp": {
-		"message": "Hi NeuroWebCR, I'd like to talk about a project"
+		"message": "Hi NeuroWeb Costa Rica, I'd like to talk about a project"
 	},
 	"langSwitcher": {
 		"label": "Language",
@@ -171,7 +171,7 @@
 		"intro": "We're ready to help you take your business to the next level with modern digital solutions.",
 		"whatsappTitle": "Message us on WhatsApp",
 		"qrTitle": "Scan to contact us",
-		"qrAlt": "QR code to contact NeuroWebCR on WhatsApp",
+		"qrAlt": "QR code to contact NeuroWeb Costa Rica on WhatsApp",
 		"qrHint": "Scan with your phone camera to open the chat.",
 		"openWhatsapp": "Open WhatsApp"
 	},
@@ -182,7 +182,7 @@
 		"socialInstagram": "https://www.instagram.com/",
 		"socialLinkedIn": "https://www.linkedin.com/",
 		"socialGitHub": "https://github.com/",
-		"copyright": "NeuroWebCR. All rights reserved.",
+		"copyright": "NeuroWeb Costa Rica. All rights reserved.",
 		"whatsappAria": "Contact on WhatsApp"
 	}
 }

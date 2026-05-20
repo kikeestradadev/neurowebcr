@@ -2,21 +2,21 @@
 
 mixin logoHorizontal()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
-	- const logoHomeLabel = (typeof siteName !== 'undefined' && typeof t !== 'undefined') ? siteName + ' - ' + t.nav.home : 'NeuroWebCR - Inicio'
+	- const logoHomeLabel = (typeof siteName !== 'undefined' && typeof t !== 'undefined') ? siteName + ' - ' + t.nav.home : 'NeuroWeb Costa Rica - Inicio'
 	a.logo(href='#inicio' aria-label=logoHomeLabel)
-		img.logo__img.logo__img--light(src=base + logoBlackH alt='NeuroWebCR' width='892' height='138' decoding='async')
+		img.logo__img.logo__img--light(src=base + logoBlackH alt='NeuroWeb Costa Rica' width='892' height='138' decoding='async')
 		img.logo__img.logo__img--dark(src=base + logoWhiteH alt='' width='886' height='132' decoding='async' aria-hidden='true')
 
 mixin logoVertical()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
-	a.logo.logo--vertical(href='#inicio' aria-label='NeuroWebCR - Inicio')
-		img.logo__img.logo__img--light(src=base + logoBlackV alt='NeuroWebCR' width='380' height='242' decoding='async')
+	a.logo.logo--vertical(href='#inicio' aria-label='NeuroWeb Costa Rica - Inicio')
+		img.logo__img.logo__img--light(src=base + logoBlackV alt='NeuroWeb Costa Rica' width='380' height='242' decoding='async')
 		img.logo__img.logo__img--dark(src=base + logoWhiteV alt='' width='380' height='242' decoding='async' aria-hidden='true')
 
 mixin logoHorizontalOnDark()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
-	a.logo.logo--on-dark(href='#inicio' class='mx-auto l:mx-0' aria-label='NeuroWebCR - Inicio')
-		img.logo__img.logo__img--dark(src=base + logoWhiteH alt='NeuroWebCR' width='886' height='132' decoding='async')
+	a.logo.logo--on-dark(href='#inicio' class='mx-auto l:mx-0' aria-label='NeuroWeb Costa Rica - Inicio')
+		img.logo__img.logo__img--dark(src=base + logoWhiteH alt='NeuroWeb Costa Rica' width='886' height='132' decoding='async')
 
 mixin logoWatermark()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
