@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+date_default_timezone_set('America/Costa_Rica');
 
 function loadEnvFile(string $projectRoot): void
 {
@@ -96,7 +97,7 @@ $dbName = envValue('DB_NAME', 'neurowebcr');
 $user = envValue('DB_USER', 'root');
 $password = envValue('DB_PASSWORD', '');
 $charset = envValue('DB_CHARSET', 'utf8mb4');
-$dbTimezoneOffset = normalizeDbTimezoneOffset(envValue('DB_TIMEZONE_OFFSET', '-06:00'));
+$dbTimezoneOffset = '-06:00';
 
 $hosts = array_values(array_unique(array_filter([$primaryHost, $fallbackHost])));
 $migrationsDir = __DIR__ . '/migrations';
