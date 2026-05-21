@@ -171,6 +171,56 @@
 		window.gtag('event', eventName, params || {});
 	};
 
+	const resolveTrackingEndpoint = () => {
+		const pathname = window.location.pathname || '/';
+		const marker = '/public/';
+		const index = pathname.indexOf(marker);
+
+		if (index !== -1) {
+			const base = pathname.slice(0, index + marker.length);
+			return `${window.location.origin}${base}api/track_contact.php`;
+		}
+
+		return `${window.location.origin}/api/track_contact.php`;
+	};
+
+	const sendContactLead = (params) => {
+		if (!params || !params.lead_type) return;
+
+		const payload = {
+			lead_type: params.lead_type,
+			cta_text: params.cta_text || '',
+			link_url: params.link_url || '',
+			page_lang: params.page_lang || '',
+			page_path: params.page_path || '',
+			referrer_url: document.referrer || '',
+		};
+
+		const body = JSON.stringify(payload);
+		const url = resolveTrackingEndpoint();
+
+		try {
+			if (typeof navigator.sendBeacon === 'function') {
+				const blob = new Blob([body], { type: 'application/json' });
+				navigator.sendBeacon(url, blob);
+				return;
+			}
+		} catch (_e) {
+			// Continue with fetch fallback.
+		}
+
+		if (typeof window.fetch === 'function') {
+			fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body,
+				keepalive: true,
+			}).catch(() => {
+				// Ignore network errors to avoid breaking CTA behavior.
+			});
+		}
+	};
+
 	const textFromNode = (node) => (node?.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120);
 
 	const initFunnelTracking = () => {
@@ -181,11 +231,17 @@
 			document.querySelectorAll(selector).forEach((el) => {
 				el.addEventListener('click', () => {
 					const params = typeof buildParams === 'function' ? buildParams(el) : {};
-					fireGAEvent(eventName, {
+					const merged = {
 						page_lang: pageLang,
 						page_path: pagePath,
 						...params,
-					});
+					};
+
+					fireGAEvent(eventName, merged);
+
+					if (eventName === 'generate_lead') {
+						sendContactLead(merged);
+					}
 				});
 			});
 		};

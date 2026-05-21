@@ -143,6 +143,37 @@ Notes:
 - Landing URL: `http://localhost/neurowebcr/public/`
 - English: `http://localhost/neurowebcr/public/en/`
 
+## MySQL Tracking and Migrations
+
+WhatsApp and email contact CTAs are tracked into MySQL through:
+
+```text
+public/api/track_contact.php
+```
+
+### Mandatory DB workflow
+
+1. Create SQL migrations under `scripts/migrations/`.
+2. Do not edit already executed production migrations.
+3. Apply with:
+
+```bash
+php scripts/run_migrations.php
+```
+
+Current migration for contact events:
+
+```text
+20260521_001_create_contact_click_events.sql
+```
+
+### Local DB defaults (XAMPP)
+
+- Host fallback: `localhost` -> `127.0.0.1`
+- Database: `neurowebcr`
+- User: `root`
+- Password: empty
+
 ## Production Deploy (cPanel / Apache)
 
 Use generated assets from `public/` for `https://neurowebcr.com/`.
