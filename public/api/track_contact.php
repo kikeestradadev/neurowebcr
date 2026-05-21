@@ -18,8 +18,17 @@ function logTrackContactError(string $message): void
     writeAppLog($projectRoot, 'mysql_errors.log', '[track_contact] ' . $message);
 }
 
+function logTrackContactRequest(string $message): void
+{
+    $projectRoot = dirname(__DIR__, 2);
+    writeAppLog($projectRoot, 'track_contact_requests.log', '[track_contact] ' . $message);
+}
+
+logTrackContactRequest('Incoming request method=' . ($_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN') . ' uri=' . ($_SERVER['REQUEST_URI'] ?? ''));
+
 $rawInput = file_get_contents('php://input');
 if ($rawInput === false || $rawInput === '') {
+    logTrackContactError('Empty body received');
     http_response_code(400);
     echo json_encode(['ok' => false, 'message' => 'Empty body']);
     exit;
@@ -27,6 +36,7 @@ if ($rawInput === false || $rawInput === '') {
 
 $payload = json_decode($rawInput, true);
 if (!is_array($payload)) {
+    logTrackContactError('Invalid JSON payload: ' . $rawInput);
     http_response_code(400);
     echo json_encode(['ok' => false, 'message' => 'Invalid JSON']);
     exit;
@@ -40,12 +50,14 @@ $pagePath = trim((string)($payload['page_path'] ?? ''));
 $referrer = trim((string)($payload['referrer_url'] ?? ''));
 
 if (!in_array($leadType, ['whatsapp', 'email'], true)) {
+    logTrackContactError('Invalid lead_type: ' . $leadType);
     http_response_code(422);
     echo json_encode(['ok' => false, 'message' => 'Invalid lead_type']);
     exit;
 }
 
 if ($ctaText === '' || $linkUrl === '' || $pageLang === '' || $pagePath === '') {
+    logTrackContactError('Missing required fields in payload: ' . json_encode($payload));
     http_response_code(422);
     echo json_encode(['ok' => false, 'message' => 'Missing required fields']);
     exit;
@@ -80,6 +92,7 @@ try {
     ]);
 
     echo json_encode(['ok' => true]);
+    logTrackContactRequest('Insert OK lead_type=' . $leadType . ' page_path=' . $pagePath);
 } catch (Throwable $e) {
     logTrackContactError('Insert failed: ' . $e->getMessage());
     http_response_code(500);

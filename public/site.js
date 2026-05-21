@@ -171,17 +171,21 @@
 		window.gtag('event', eventName, params || {});
 	};
 
-	const resolveTrackingEndpoint = () => {
+	const resolveTrackingEndpoints = () => {
 		const pathname = window.location.pathname || '/';
 		const marker = '/public/';
 		const index = pathname.indexOf(marker);
+		const candidates = [];
 
 		if (index !== -1) {
 			const base = pathname.slice(0, index + marker.length);
-			return `${window.location.origin}${base}api/track_contact.php`;
+			candidates.push(`${window.location.origin}${base}api/track_contact.php`);
 		}
 
-		return `${window.location.origin}/api/track_contact.php`;
+		candidates.push(`${window.location.origin}/public/api/track_contact.php`);
+		candidates.push(`${window.location.origin}/api/track_contact.php`);
+
+		return Array.from(new Set(candidates));
 	};
 
 	const sendContactLead = (params) => {
@@ -197,27 +201,30 @@
 		};
 
 		const body = JSON.stringify(payload);
-		const url = resolveTrackingEndpoint();
+		const urls = resolveTrackingEndpoints();
 
-		try {
-			if (typeof navigator.sendBeacon === 'function') {
-				const blob = new Blob([body], { type: 'application/json' });
-				navigator.sendBeacon(url, blob);
-				return;
-			}
-		} catch (_e) {
-			// Continue with fetch fallback.
-		}
+		if (typeof window.fetch !== 'function') return;
 
-		if (typeof window.fetch === 'function') {
-			fetch(url, {
+		const tryIndex = (index) => {
+			if (index >= urls.length) return;
+			fetch(urls[index], {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body,
 				keepalive: true,
-			}).catch(() => {
-				// Ignore network errors to avoid breaking CTA behavior.
-			});
+			})
+				.then((response) => {
+					if (!response.ok) {
+						tryIndex(index + 1);
+					}
+				})
+				.catch(() => {
+					tryIndex(index + 1);
+				});
+		};
+
+		if (urls.length) {
+			tryIndex(0);
 		}
 	};
 

@@ -57,12 +57,25 @@ function writeAppLog(string $projectRoot, string $filename, string $message): vo
         @mkdir($logDir, 0775, true);
     }
 
+    if (is_dir($logDir) && !is_writable($logDir)) {
+        @chmod($logDir, 0777);
+    }
+
     if (!is_dir($logDir) || !is_writable($logDir)) {
+        error_log('[neurowebcr-log-fallback] ' . $message);
         return;
     }
 
     $line = sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $message);
-    @file_put_contents($logDir . '/' . $filename, $line, FILE_APPEND);
+    $logFile = $logDir . '/' . $filename;
+    if (is_file($logFile) && !is_writable($logFile)) {
+        @chmod($logFile, 0666);
+    }
+
+    $result = @file_put_contents($logFile, $line, FILE_APPEND);
+    if ($result === false) {
+        error_log('[neurowebcr-log-fallback] ' . $message);
+    }
 }
 
 function getDatabaseConnection(): PDO
