@@ -46,28 +46,56 @@
 		"stat2Label": "Enfoque premium",
 		"stat3Value": "IA",
 		"stat3Label": "Automatización inteligente",
-		"stat4Label": "Desde Costa Rica"
+		"stat4Label": "Desde Costa Rica",
+		"stat5Label": "Web Design",
+		"stat6Label": "SEO"
+	},
+	"trust": {
+		"title": "Por qué confiar en NeuroWebCR",
+		"intro": "Trabajamos con enfoque verificable, técnico y orientado a resultados para empresas que necesitan ejecutar con seriedad.",
+		"items": [
+			{
+				"title": "Desarrollo técnico real",
+				"description": "Implementación a medida, sin depender de plantillas genéricas como solución principal."
+			},
+			{
+				"title": "IA aplicada a procesos",
+				"description": "Automatización y agentes enfocados en operaciones concretas: atención, ventas y tareas internas."
+			},
+			{
+				"title": "Seguridad y cumplimiento",
+				"description": "Diseño de soluciones considerando privacidad, seguridad y cumplimiento normativo desde el inicio."
+			},
+			{
+				"title": "Acompañamiento estratégico",
+				"description": "Soporte consultivo para priorizar iniciativas digitales según impacto técnico y de negocio."
+			}
+		]
 	},
 	"services": {
 		"eyebrow": "Qué hacemos",
 		"title": "Servicios",
-		"intro": "Especializados en tecnología moderna para empresas que buscan innovar y crecer.",
+		"intro": "Servicios diseñados para mejorar conversión, eficiencia operativa y toma de decisiones con datos.",
 		"items": [
 			{
-				"title": "Desarrollo Web",
-				"description": "Sitios web modernos, rápidos y optimizados para resultados y conversión."
+				"title": "Desarrollo web orientado a conversión",
+				"description": "Sitios y landings rápidos, claros y enfocados en generar contactos y oportunidades comerciales."
 			},
 			{
-				"title": "AI Agents",
-				"description": "Agentes inteligentes que automatizan tareas y mejoran la productividad de tu equipo."
+				"title": "Agentes IA para atención, ventas y procesos internos",
+				"description": "Asistentes inteligentes conectados a tus flujos para responder, clasificar y ejecutar tareas repetitivas."
 			},
 			{
-				"title": "Automatización",
-				"description": "Automatizamos procesos para ahorrar tiempo, reducir costos y escalar operaciones."
+				"title": "Automatización de flujos operativos",
+				"description": "Integración de herramientas y reglas de negocio para reducir fricción, errores y tiempos de respuesta."
 			},
 			{
-				"title": "Soluciones Digitales",
-				"description": "Estrategias y herramientas digitales para hacer crecer tu marca con impacto real."
+				"title": "Consultoría digital, datos y cumplimiento",
+				"description": "Definición de estrategia tecnológica, métricas, gobierno de datos y lineamientos de cumplimiento."
+			},
+			{
+				"title": "Comercio Electrónico y Blockchain",
+				"description": "Implementación de tiendas digitales e integraciones blockchain para nuevos modelos de venta, trazabilidad y confianza."
 			}
 		]
 	},
@@ -165,6 +193,43 @@
 			}
 		]
 	},
+	"legal": {
+		"eyebrow": "Legal y confianza",
+		"title": "Compromiso legal y manejo responsable de datos",
+		"intro": "Operamos con lineamientos claros para proteger información y garantizar transparencia en cada implementación.",
+		"items": [
+			{
+				"title": "Políticas de privacidad",
+				"image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=80",
+				"alt": "Documento legal y bolígrafo representando políticas de privacidad"
+			},
+			{
+				"title": "Términos del servicio",
+				"image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80",
+				"alt": "Contrato y entorno corporativo representando términos del servicio"
+			},
+			{
+				"title": "Manejo responsable de datos y protocolo de actuación ante PRODHAB",
+				"image": "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=900&q=80",
+				"alt": "Persona trabajando con datos en laptop de forma segura"
+			},
+			{
+				"title": "Cumplimiento Ley 8968 (Costa Rica) y buenas prácticas GDPR",
+				"image": "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&w=900&q=80",
+				"alt": "Edificio institucional representando cumplimiento normativo y regulación"
+			},
+			{
+				"title": "Buenas prácticas de seguridad alineadas a ISO 27001",
+				"image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=80",
+				"alt": "Candado digital representando seguridad de la información"
+			},
+			{
+				"title": "Comercio Electrónico y Blockchain",
+				"image": "https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&w=900&q=80",
+				"alt": "Concepto digital de comercio electrónico y blockchain"
+			}
+		]
+	},
 	"contact": {
 		"eyebrow": "Contacto",
 		"title": "Hablemos de tu proyecto",
@@ -180,7 +245,7 @@
 		"linksLabel": "Enlaces",
 		"socialLabel": "Redes",
 		"socialInstagram": "https://www.instagram.com/",
-		"socialLinkedIn": "https://www.linkedin.com/",
+		"socialLinkedIn": "https://www.linkedin.com/company/neurowebcr",
 		"socialGitHub": "https://github.com/",
 		"copyright": "NeuroWeb Costa Rica. Todos los derechos reservados.",
 		"whatsappAria": "Contactar por WhatsApp"
