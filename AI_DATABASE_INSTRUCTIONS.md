@@ -38,3 +38,9 @@ Si una tarea solicita cambios de base de datos, el agente debe:
 - crear la migración en `scripts/migrations/`,
 - verificar que `php scripts/run_migrations.php` la aplique,
 - y documentar el comando de ejecución para producción.
+
+## Regla de integración con plantillas/frontend
+Si el cambio de base de datos depende de eventos frontend (por ejemplo tracking de CTAs):
+- aplicar cambios sobre archivos fuente (`src/` y/o JS runtime correspondiente),
+- recompilar salidas necesarias,
+- y validar que producción sirva assets versionados para evitar cache de JS antiguo.

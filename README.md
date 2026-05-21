@@ -14,6 +14,15 @@ src/js/           →  public/index-dist.js     (Prepros / bundler)
 public/site.js    →  theme + menu + Swiper
 ```
 
+### Prepros/Pug guardrails (important)
+
+- Source of truth is `src/` (`src/pug`, `src/styles`, `src/js`).
+- Do not implement permanent changes by editing generated HTML in `public/` manually.
+- After template or tracking changes, regenerate outputs (`npm run build:pug` or `npm run build`) and verify both:
+  - `public/index.html`
+  - `public/en/index.html`
+- Keep asset versioning active (`site.js?v=...`, `tailwind-dist.css?v=...`) to prevent stale-cache deploy issues.
+
 ### Prepros Order (recommended flow)
 
 1. `src/styles/styles.scss` → `src/styles/styles.css`
