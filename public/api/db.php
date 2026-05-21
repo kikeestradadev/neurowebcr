@@ -62,6 +62,11 @@ function normalizeDbTimezoneOffset(string $offset): string
     return preg_match('/^[+-](0\d|1[0-4]):[0-5]\d$/', $offset) === 1 ? $offset : '-06:00';
 }
 
+function getDbTimezoneOffset(): string
+{
+    return normalizeDbTimezoneOffset(envValue('DB_TIMEZONE_OFFSET', '-06:00'));
+}
+
 function initializeAppTimezone(string $projectRoot): void
 {
     loadEnvFile($projectRoot);
@@ -117,7 +122,7 @@ function getDatabaseConnection(): PDO
     $user = envValue('DB_USER', 'root');
     $password = envValue('DB_PASSWORD', '');
     $charset = envValue('DB_CHARSET', 'utf8mb4');
-    $dbTimezoneOffset = normalizeDbTimezoneOffset(envValue('DB_TIMEZONE_OFFSET', '-06:00'));
+    $dbTimezoneOffset = getDbTimezoneOffset();
 
     $hosts = array_values(array_unique(array_filter([$primaryHost, $fallbackHost])));
     $options = [

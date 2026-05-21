@@ -74,10 +74,11 @@ $ipAddress = mb_substr((string)($_SERVER['REMOTE_ADDR'] ?? ''), 0, 64);
 
 try {
     $pdo = getDatabaseConnection();
+    $dbTimezoneOffset = getDbTimezoneOffset();
     $stmt = $pdo->prepare(
         'INSERT INTO contact_click_events '
-        . '(lead_type, cta_text, link_url, page_lang, page_path, referrer_url, user_agent, ip_address) '
-        . 'VALUES (:lead_type, :cta_text, :link_url, :page_lang, :page_path, :referrer_url, :user_agent, :ip_address)'
+        . '(lead_type, cta_text, link_url, page_lang, page_path, referrer_url, user_agent, ip_address, created_at) '
+        . 'VALUES (:lead_type, :cta_text, :link_url, :page_lang, :page_path, :referrer_url, :user_agent, :ip_address, CONVERT_TZ(UTC_TIMESTAMP(), "+00:00", :db_tz_offset))'
     );
 
     $stmt->execute([
@@ -89,6 +90,7 @@ try {
         'referrer_url' => $referrer !== '' ? $referrer : null,
         'user_agent' => $userAgent !== '' ? $userAgent : null,
         'ip_address' => $ipAddress !== '' ? $ipAddress : null,
+        'db_tz_offset' => $dbTimezoneOffset,
     ]);
 
     echo json_encode(['ok' => true]);
