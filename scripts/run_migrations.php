@@ -2,10 +2,66 @@
 
 declare(strict_types=1);
 
-$hosts = ['localhost', '127.0.0.1'];
-$dbName = 'neurowebcr';
-$user = 'root';
-$password = '';
+function loadEnvFile(string $projectRoot): void
+{
+    static $loaded = false;
+    if ($loaded) {
+        return;
+    }
+
+    $envPath = $projectRoot . '/.env';
+    if (!is_file($envPath)) {
+        $loaded = true;
+        return;
+    }
+
+    $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if ($lines === false) {
+        $loaded = true;
+        return;
+    }
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) {
+            continue;
+        }
+
+        $parts = explode('=', $line, 2);
+        if (count($parts) !== 2) {
+            continue;
+        }
+
+        $key = trim($parts[0]);
+        $value = trim($parts[1]);
+        $_ENV[$key] = $value;
+        putenv("{$key}={$value}");
+    }
+
+    $loaded = true;
+}
+
+function envValue(string $key, string $default = ''): string
+{
+    $value = getenv($key);
+    if ($value === false || $value === '') {
+        return $default;
+    }
+    return $value;
+}
+
+$projectRoot = dirname(__DIR__);
+loadEnvFile($projectRoot);
+
+$primaryHost = envValue('DB_HOST', 'localhost');
+$fallbackHost = envValue('DB_HOST_FALLBACK', '127.0.0.1');
+$port = envValue('DB_PORT', '3306');
+$dbName = envValue('DB_NAME', 'neurowebcr');
+$user = envValue('DB_USER', 'root');
+$password = envValue('DB_PASSWORD', '');
+$charset = envValue('DB_CHARSET', 'utf8mb4');
+
+$hosts = array_values(array_unique(array_filter([$primaryHost, $fallbackHost])));
 $migrationsDir = __DIR__ . '/migrations';
 
 if (!is_dir($migrationsDir)) {
@@ -25,7 +81,7 @@ try {
     foreach ($hosts as $host) {
         try {
             $serverPdo = new PDO(
-                "mysql:host={$host};charset=utf8mb4",
+                "mysql:host={$host};port={$port};charset={$charset}",
                 $user,
                 $password,
                 $options
@@ -48,7 +104,7 @@ try {
     foreach ($hosts as $host) {
         try {
             $pdo = new PDO(
-                "mysql:host={$host};dbname={$dbName};charset=utf8mb4",
+                "mysql:host={$host};port={$port};dbname={$dbName};charset={$charset}",
                 $user,
                 $password,
                 $options
