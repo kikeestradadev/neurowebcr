@@ -53,7 +53,7 @@
 		const nav = document.getElementById('mobile-nav');
 		if (!toggle || !nav) return;
 
-		const links = nav.querySelectorAll('a');
+		const links = nav.querySelectorAll('a, button[data-open-lead-modal]');
 		const openLabel = toggle.dataset.labelOpen || toggle.getAttribute('aria-label') || 'Open menu';
 		const closeLabel = toggle.dataset.labelClose || 'Close menu';
 
@@ -284,6 +284,14 @@
 				success: 'Gracias. Tu consulta fue enviada correctamente.',
 				error: 'No pudimos enviar tu consulta. Intenta de nuevo.',
 				popupPhone: 'Listo. Selecciona uno de los números para llamar ahora.',
+				waNamePrefix: 'Mi nombre es',
+				mailSubjectPrefix: 'Consulta desde web',
+				mailFieldName: 'Nombre',
+				mailFieldPhone: 'Teléfono',
+				mailFieldEmail: 'Correo',
+				mailFieldMessage: 'Mensaje',
+				popupBlockedWhatsapp: 'Habilita popups para abrir WhatsApp en una nueva pestaña.',
+				popupBlockedEmail: 'Habilita popups para abrir tu cliente de correo en una nueva pestaña.',
 			},
 			en: {
 				send: 'Send',
@@ -291,6 +299,14 @@
 				success: 'Thanks. Your inquiry was sent successfully.',
 				error: "We couldn't send your inquiry. Please try again.",
 				popupPhone: 'Done. Choose one of the numbers to call now.',
+				waNamePrefix: 'My name is',
+				mailSubjectPrefix: 'Website inquiry',
+				mailFieldName: 'Name',
+				mailFieldPhone: 'Phone',
+				mailFieldEmail: 'Email',
+				mailFieldMessage: 'Message',
+				popupBlockedWhatsapp: 'Enable popups to open WhatsApp in a new tab.',
+				popupBlockedEmail: 'Enable popups to open your email client in a new tab.',
 			},
 		}[locale];
 
@@ -396,31 +412,32 @@
 										const defaultText = String(url.searchParams.get('text') || '').trim();
 										const userName = String(payload.full_name || '').trim();
 										const userMessage = String(payload.message || '').trim();
-										const composedMessage = `${defaultText} ${userName ? `Mi nombre es ${userName}, ` : ''}${userMessage}`.trim();
+										const nameChunk = userName ? `${copy.waNamePrefix} ${userName}, ` : '';
+										const composedMessage = `${defaultText} ${nameChunk}${userMessage}`.trim();
 										if (composedMessage) {
 											url.searchParams.set('text', composedMessage);
 										}
 										const opened = openInBlank(url.toString());
 										if (!opened) {
-											feedback.textContent = 'Habilita popups para abrir WhatsApp en una nueva pestaña.';
+											feedback.textContent = copy.popupBlockedWhatsapp;
 										}
 									} catch (_e) {
 										const opened = openInBlank(destination);
 										if (!opened) {
-											feedback.textContent = 'Habilita popups para abrir WhatsApp en una nueva pestaña.';
+											feedback.textContent = copy.popupBlockedWhatsapp;
 										}
 									}
 								}
 							} else if (channel === 'email') {
 								const trigger = document.querySelector('[data-open-lead-modal="email"]');
 								const baseMailto = trigger?.dataset?.emailUrl || 'mailto:hello@neurowebcr.com';
-								const subject = encodeURIComponent(`Consulta desde web - ${payload.full_name || ''}`.trim());
-								const bodyText = `Nombre: ${payload.full_name || ''}\nTeléfono: ${payload.phone || ''}\nCorreo: ${payload.email || ''}\n\nMensaje:\n${payload.message || ''}`;
+								const subject = encodeURIComponent(`${copy.mailSubjectPrefix} - ${payload.full_name || ''}`.trim());
+								const bodyText = `${copy.mailFieldName}: ${payload.full_name || ''}\n${copy.mailFieldPhone}: ${payload.phone || ''}\n${copy.mailFieldEmail}: ${payload.email || ''}\n\n${copy.mailFieldMessage}:\n${payload.message || ''}`;
 								const body = encodeURIComponent(bodyText);
 								const sep = baseMailto.includes('?') ? '&' : '?';
 								const opened = openInBlank(`${baseMailto}${sep}subject=${subject}&body=${body}`);
 								if (!opened) {
-									feedback.textContent = 'Habilita popups para abrir tu cliente de correo en una nueva pestaña.';
+									feedback.textContent = copy.popupBlockedEmail;
 								}
 							}
 						}, 900);

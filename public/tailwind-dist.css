@@ -233,6 +233,9 @@
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
+  .top-1\/2 {
+    top: calc(1 / 2 * 100%);
+  }
   .top-3 {
     top: calc(var(--spacing) * 3);
   }
@@ -452,6 +455,9 @@
   .max-w-6xl {
     max-width: var(--container-6xl);
   }
+  .max-w-\[250px\] {
+    max-width: 250px;
+  }
   .max-w-\[300px\] {
     max-width: 300px;
   }
@@ -475,6 +481,10 @@
   }
   .border-collapse {
     border-collapse: collapse;
+  }
+  .-translate-y-1\/2 {
+    --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .list-disc {
     list-style-type: disc;
@@ -726,6 +736,9 @@
   .pt-\[var\(--header-height\)\] {
     padding-top: var(--header-height);
   }
+  .pb-2 {
+    padding-bottom: calc(var(--spacing) * 2);
+  }
   .pl-6 {
     padding-left: calc(var(--spacing) * 6);
   }
@@ -831,13 +844,13 @@
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
   }
-  .tracking-\[0\.2em\] {
-    --tw-tracking: 0.2em;
-    letter-spacing: 0.2em;
-  }
   .tracking-\[0\.3em\] {
     --tw-tracking: 0.3em;
     letter-spacing: 0.3em;
+  }
+  .tracking-\[0\.12em\] {
+    --tw-tracking: 0.12em;
+    letter-spacing: 0.12em;
   }
   .tracking-\[0\.35em\] {
     --tw-tracking: 0.35em;
@@ -1058,6 +1071,16 @@
       flex-direction: row;
     }
   }
+  .m\:block {
+    @media (width >= 640px) {
+      display: block;
+    }
+  }
+  .m\:flex {
+    @media (width >= 640px) {
+      display: flex;
+    }
+  }
   .m\:h-56 {
     @media (width >= 640px) {
       height: calc(var(--spacing) * 56);
@@ -1103,6 +1126,11 @@
       align-items: center;
     }
   }
+  .m\:gap-5 {
+    @media (width >= 640px) {
+      gap: calc(var(--spacing) * 5);
+    }
+  }
   .m\:p-10 {
     @media (width >= 640px) {
       padding: calc(var(--spacing) * 10);
@@ -1111,6 +1139,12 @@
   .m\:py-20 {
     @media (width >= 640px) {
       padding-block: calc(var(--spacing) * 20);
+    }
+  }
+  .m\:text-3xl {
+    @media (width >= 640px) {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
     }
   }
   .m\:text-4xl {
@@ -1353,6 +1387,12 @@
   .l\:text-\[36px\] {
     @media (width >= 960px) {
       font-size: 36px;
+    }
+  }
+  .l\:tracking-\[0\.2em\] {
+    @media (width >= 960px) {
+      --tw-tracking: 0.2em;
+      letter-spacing: 0.2em;
     }
   }
   .lg\:w-1\/5 {
@@ -1812,28 +1852,46 @@ input, button, select, textarea {
   }
 }
 .mobile-nav {
-  max-height: 0;
-  overflow: hidden;
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: 90vw;
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
   background: var(--nw-header-bg);
   border-top: 1px solid var(--nw-header-border);
-  transition: max-height 0.35s ease;
+  border-right: 1px solid var(--nw-header-border);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.32s ease;
+  z-index: 995;
+  will-change: transform, opacity;
 }
 .mobile-nav:not([hidden]).is-open {
-  max-height: 22rem;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 .mobile-nav[hidden] {
   display: block;
-  max-height: 0;
-}
-.mobile-nav[hidden].is-open {
-  max-height: 22rem;
 }
 @media (min-width: 960px) {
   .mobile-nav {
     display: none !important;
-    max-height: 0 !important;
-    overflow: hidden;
+    transform: none !important;
+    opacity: 0;
+    pointer-events: none;
   }
+}
+.mobile-nav-cta {
+  width: auto;
+  min-width: 10.5rem;
+  max-width: calc(100% - 1rem);
+  margin-left: 0.5rem;
+  border: 0;
+  cursor: pointer;
 }
 body.mobile-nav-open {
   overflow: hidden;
@@ -1956,6 +2014,9 @@ body.mobile-nav-open {
   .contact-actions__label {
     font-size: 1.125rem;
   }
+}
+.contact-actions__label--whatsapp {
+  white-space: nowrap;
 }
 .btn-whatsapp.contact-actions__item:hover {
   border-color: rgba(37, 211, 102, 0.45);
@@ -2280,21 +2341,25 @@ body.mobile-nav-open {
     align-items: flex-start;
   }
 }
-.footer-nav__list a {
+.footer-nav__list a, .footer-nav__list button {
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--nw-band-text);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
   transition: color 0.2s ease;
 }
 @media (min-width: 960px) {
-  .footer-nav__list a {
+  .footer-nav__list a, .footer-nav__list button {
     font-size: 0.875rem;
   }
 }
-.footer-nav__list a:hover {
+.footer-nav__list a:hover, .footer-nav__list button:hover {
   color: var(--nw-accent);
 }
 .footer-social {
@@ -2316,8 +2381,8 @@ body.mobile-nav-open {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border: 1px solid var(--nw-band-border);
   border-radius: 9999px;
   text-decoration: none;
@@ -2327,8 +2392,8 @@ body.mobile-nav-open {
 }
 @media (min-width: 960px) {
   .footer-social__list a {
-    width: 3rem;
-    height: 3rem;
+    width: 3.25rem;
+    height: 3.25rem;
   }
 }
 .footer-social__list a:hover {
@@ -2336,14 +2401,14 @@ body.mobile-nav-open {
   color: var(--nw-accent);
 }
 .social-icon__svg {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
 }
 @media (min-width: 960px) {
   .social-icon__svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.35rem;
+    height: 1.35rem;
   }
 }
 .social-icon__svg--light {
@@ -2391,6 +2456,21 @@ body.mobile-nav-open {
   .footer-bottom__copy {
     font-size: 0.875rem;
   }
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 @property --tw-border-style {
   syntax: "*";
@@ -2586,6 +2666,9 @@ body.mobile-nav-open {
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-font-weight: initial;
