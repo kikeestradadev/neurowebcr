@@ -41,3 +41,11 @@ Cuando una tarea toque base de datos:
 - ejecutar/validar `php scripts/run_migrations.php`,
 - documentar resultado,
 - y si hay diferencias local vs prod, dejarlas explícitas en el reporte final.
+
+## Regla anti-regresión (tracking frontend + API)
+Cuando se cambie cualquier lógica de tracking frontend o endpoints bajo `public/api/`:
+1. Verificar que `public/index.html` y `public/en/index.html` reflejen cambios de assets versionados (`site.js?v=...`).
+2. Confirmar que el endpoint acepte `POST` real con `curl`.
+3. Confirmar escritura en DB (`SELECT` de últimos registros).
+4. Confirmar permisos de `logs/` y revisar trazas (`track_contact_requests.log`, `mysql_errors.log`).
+5. No cerrar la tarea hasta tener evidencia de estos 4 puntos en el reporte.

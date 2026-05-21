@@ -207,6 +207,48 @@ Production credentials can differ from local. Set the same keys in production en
 - `DB_PASSWORD`
 - `DB_CHARSET`
 
+### Mandatory verification after deploy (avoid silent failures)
+
+1. Confirm new assets are served with version param:
+
+```bash
+curl -s https://neurowebcr.com/ | grep -E "site.js\\?v=|tailwind-dist.css\\?v="
+```
+
+2. Confirm logs directory is writable by web server:
+
+```bash
+cd /home/ovalhost/neurowebcr
+mkdir -p logs
+chown -R ovalhost:nobody logs
+chmod -R 775 logs
+```
+
+3. Validate tracking endpoint directly:
+
+```bash
+curl -i -X POST "https://neurowebcr.com/public/api/track_contact.php" \
+  -H "Content-Type: application/json" \
+  -d '{"lead_type":"whatsapp","cta_text":"deploy_test","link_url":"https://wa.me/50670118183","page_lang":"es","page_path":"/"}'
+```
+
+4. Validate database writes:
+
+```sql
+SELECT id, lead_type, cta_text, page_path, created_at
+FROM contact_click_events
+ORDER BY id DESC
+LIMIT 20;
+```
+
+5. If something fails, inspect logs:
+
+```bash
+tail -n 100 /home/ovalhost/neurowebcr/logs/track_contact_requests.log
+tail -n 100 /home/ovalhost/neurowebcr/logs/mysql_errors.log
+tail -n 100 /home/ovalhost/neurowebcr/logs/migrations.log
+```
+
 ## Production Deploy (cPanel / Apache)
 
 Use generated assets from `public/` for `https://neurowebcr.com/`.
