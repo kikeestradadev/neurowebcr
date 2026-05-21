@@ -2,23 +2,27 @@
 
 mixin logoHorizontal()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
+	- const logoVersion = (typeof assetVersion !== 'undefined') ? assetVersion : Date.now().toString()
 	- const logoHomeLabel = (typeof siteName !== 'undefined' && typeof t !== 'undefined') ? siteName + ' - ' + t.nav.home : 'NeuroWeb Costa Rica - Inicio'
 	a.logo(href='#inicio' aria-label=logoHomeLabel)
-		img.logo__img.logo__img--light(src=base + logoBlackH alt='NeuroWeb Costa Rica' width='892' height='138' decoding='async')
-		img.logo__img.logo__img--dark(src=base + logoWhiteH alt='' width='886' height='132' decoding='async' aria-hidden='true')
+		img.logo__img.logo__img--light(src=base + logoBlackH + '?v=' + logoVersion alt='NeuroWeb Costa Rica' width='892' height='138' decoding='async')
+		img.logo__img.logo__img--dark(src=base + logoWhiteH + '?v=' + logoVersion alt='' width='886' height='132' decoding='async' aria-hidden='true')
 
 mixin logoVertical()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
+	- const logoVersion = (typeof assetVersion !== 'undefined') ? assetVersion : Date.now().toString()
 	a.logo.logo--vertical(href='#inicio' aria-label='NeuroWeb Costa Rica - Inicio')
-		img.logo__img.logo__img--light(src=base + logoBlackV alt='NeuroWeb Costa Rica' width='380' height='242' decoding='async')
-		img.logo__img.logo__img--dark(src=base + logoWhiteV alt='' width='380' height='242' decoding='async' aria-hidden='true')
+		img.logo__img.logo__img--light(src=base + logoBlackV + '?v=' + logoVersion alt='NeuroWeb Costa Rica' width='380' height='242' decoding='async')
+		img.logo__img.logo__img--dark(src=base + logoWhiteV + '?v=' + logoVersion alt='' width='380' height='242' decoding='async' aria-hidden='true')
 
 mixin logoHorizontalOnDark()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
+	- const logoVersion = (typeof assetVersion !== 'undefined') ? assetVersion : Date.now().toString()
 	a.logo.logo--on-dark(href='#inicio' class='mx-auto l:mx-0' aria-label='NeuroWeb Costa Rica - Inicio')
-		img.logo__img.logo__img--dark(src=base + logoWhiteH alt='NeuroWeb Costa Rica' width='886' height='132' decoding='async')
+		img.logo__img.logo__img--dark(src=base + logoWhiteH + '?v=' + logoVersion alt='NeuroWeb Costa Rica' width='886' height='132' decoding='async')
 
 mixin logoWatermark()
 	- const base = (typeof assetBase !== 'undefined') ? assetBase : './'
-	img.logo__img.logo__img--light.hero-watermark(src=base + logoBlackV alt='' aria-hidden='true' width='380' height='242' decoding='async')
-	img.logo__img.logo__img--dark.hero-watermark(src=base + logoWhiteV alt='' aria-hidden='true' width='380' height='242' decoding='async')
+	- const logoVersion = (typeof assetVersion !== 'undefined') ? assetVersion : Date.now().toString()
+	img.logo__img.logo__img--light.hero-watermark(src=base + logoBlackV + '?v=' + logoVersion alt='' aria-hidden='true' width='380' height='242' decoding='async')
+	img.logo__img.logo__img--dark.hero-watermark(src=base + logoWhiteV + '?v=' + logoVersion alt='' aria-hidden='true' width='380' height='242' decoding='async')
