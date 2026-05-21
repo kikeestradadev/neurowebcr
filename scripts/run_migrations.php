@@ -165,6 +165,8 @@ if (!$files) {
 
 $checkStmt = $pdo->prepare('SELECT 1 FROM migrations WHERE migration_name = :name LIMIT 1');
 $insertStmt = $pdo->prepare('INSERT INTO migrations (migration_name) VALUES (:name)');
+$appliedCount = 0;
+$skippedCount = 0;
 
 foreach ($files as $file) {
     $name = basename($file);
@@ -172,6 +174,7 @@ foreach ($files as $file) {
     $checkStmt->execute(['name' => $name]);
     if ($checkStmt->fetchColumn()) {
         echo "- Omitida (ya aplicada): {$name}\n";
+        $skippedCount++;
         continue;
     }
 
@@ -186,6 +189,7 @@ foreach ($files as $file) {
         $pdo->exec($sql);
         $insertStmt->execute(['name' => $name]);
         echo "+ Aplicada: {$name}\n";
+        $appliedCount++;
     } catch (Throwable $e) {
         writeMigrationLog($projectRoot, "Error applying {$name}: " . $e->getMessage());
         fwrite(STDERR, "Error aplicando {$name}: " . $e->getMessage() . "\n");
@@ -193,4 +197,9 @@ foreach ($files as $file) {
     }
 }
 
-echo "Migraciones completadas.\n";
+if ($appliedCount === 0) {
+    echo "No hay migraciones nuevas por aplicar.\n";
+    exit(0);
+}
+
+echo "Migraciones completadas. Aplicadas: {$appliedCount}. Omitidas: {$skippedCount}.\n";
