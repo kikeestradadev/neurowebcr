@@ -4,6 +4,9 @@ Corporate landing page built with **light/dark theme**, modular Pug, Sass, Tailw
 
 **Demo:** https://neurowebcr.com/
 
+Operational guardrails for future changes:
+- `CHANGE_GUARDRAILS.md`
+
 ## Stack and Build Flow (Prepros)
 
 ```text
