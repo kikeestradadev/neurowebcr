@@ -50,6 +50,19 @@ function envValue(string $key, string $default = ''): string
     return $value;
 }
 
+function normalizeDbTimezoneOffset(string $offset): string
+{
+    return preg_match('/^[+-](0\d|1[0-4]):[0-5]\d$/', $offset) === 1 ? $offset : '-06:00';
+}
+
+function initializeAppTimezone(string $projectRoot): void
+{
+    $appTimezone = envValue('APP_TIMEZONE', 'America/Costa_Rica');
+    if (!@date_default_timezone_set($appTimezone)) {
+        date_default_timezone_set('America/Costa_Rica');
+    }
+}
+
 function writeMigrationLog(string $projectRoot, string $message): void
 {
     $logDir = $projectRoot . '/logs';
@@ -67,6 +80,7 @@ function writeMigrationLog(string $projectRoot, string $message): void
 
 $projectRoot = dirname(__DIR__);
 loadEnvFile($projectRoot);
+initializeAppTimezone($projectRoot);
 
 $primaryHost = envValue('DB_HOST', 'localhost');
 $fallbackHost = envValue('DB_HOST_FALLBACK', '127.0.0.1');
@@ -75,6 +89,7 @@ $dbName = envValue('DB_NAME', 'neurowebcr');
 $user = envValue('DB_USER', 'root');
 $password = envValue('DB_PASSWORD', '');
 $charset = envValue('DB_CHARSET', 'utf8mb4');
+$dbTimezoneOffset = normalizeDbTimezoneOffset(envValue('DB_TIMEZONE_OFFSET', '-06:00'));
 
 $hosts = array_values(array_unique(array_filter([$primaryHost, $fallbackHost])));
 $migrationsDir = __DIR__ . '/migrations';
@@ -101,6 +116,7 @@ try {
                 $password,
                 $options
             );
+            $serverPdo->exec("SET time_zone = '{$dbTimezoneOffset}'");
             break;
         } catch (PDOException $e) {
             $lastException = $e;
@@ -128,6 +144,7 @@ try {
                 $password,
                 $options
             );
+            $pdo->exec("SET time_zone = '{$dbTimezoneOffset}'");
             break;
         } catch (PDOException $e) {
             $lastException = $e;

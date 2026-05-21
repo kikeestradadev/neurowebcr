@@ -50,6 +50,20 @@ function envValue(string $key, string $default = ''): string
     return $value;
 }
 
+function normalizeDbTimezoneOffset(string $offset): string
+{
+    return preg_match('/^[+-](0\d|1[0-4]):[0-5]\d$/', $offset) === 1 ? $offset : '-06:00';
+}
+
+function initializeAppTimezone(string $projectRoot): void
+{
+    loadEnvFile($projectRoot);
+    $appTimezone = envValue('APP_TIMEZONE', 'America/Costa_Rica');
+    if (!@date_default_timezone_set($appTimezone)) {
+        date_default_timezone_set('America/Costa_Rica');
+    }
+}
+
 function writeAppLog(string $projectRoot, string $filename, string $message): void
 {
     $logDir = $projectRoot . '/logs';
@@ -96,6 +110,7 @@ function getDatabaseConnection(): PDO
     $user = envValue('DB_USER', 'root');
     $password = envValue('DB_PASSWORD', '');
     $charset = envValue('DB_CHARSET', 'utf8mb4');
+    $dbTimezoneOffset = normalizeDbTimezoneOffset(envValue('DB_TIMEZONE_OFFSET', '-06:00'));
 
     $hosts = array_values(array_unique(array_filter([$primaryHost, $fallbackHost])));
     $options = [
@@ -113,6 +128,7 @@ function getDatabaseConnection(): PDO
                 $password,
                 $options
             );
+            $pdo->exec("SET time_zone = '{$dbTimezoneOffset}'");
             return $pdo;
         } catch (PDOException $e) {
             $lastException = $e;
@@ -126,3 +142,5 @@ function getDatabaseConnection(): PDO
 
     throw $lastException ?? new RuntimeException('No se pudo conectar a MySQL.');
 }
+
+initializeAppTimezone(dirname(__DIR__, 2));
