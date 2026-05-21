@@ -20,6 +20,7 @@ const loadLocale = (code) => {
 };
 
 const compileAll = () => {
+	const buildVersion = Date.now().toString();
 	for (const { code, outDir, assetBase } of LOCALES) {
 		const langHrefEs = code === 'es' ? './' : '../';
 		const langHrefEn = code === 'es' ? './en/' : './';
@@ -51,6 +52,7 @@ const compileAll = () => {
 			seoOgLocale: ogLocale,
 			seoOgLocaleAlternate: ogLocaleAlternate,
 			seoSiteUrl: siteUrl,
+			buildVersion,
 			portfolioItems,
 		});
 

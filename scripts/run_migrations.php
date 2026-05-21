@@ -34,6 +34,13 @@ function loadEnvFile(string $projectRoot): void
 
         $key = trim($parts[0]);
         $value = trim($parts[1]);
+
+        $existing = getenv($key);
+        if ($existing !== false && $existing !== "") {
+            $_ENV[$key] = $existing;
+            continue;
+        }
+
         $_ENV[$key] = $value;
         putenv("{$key}={$value}");
     }
