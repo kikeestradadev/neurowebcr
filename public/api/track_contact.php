@@ -12,6 +12,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 
 require_once __DIR__ . '/db.php';
 
+function logTrackContactError(string $message): void
+{
+    $projectRoot = dirname(__DIR__, 2);
+    writeAppLog($projectRoot, 'mysql_errors.log', '[track_contact] ' . $message);
+}
+
 $rawInput = file_get_contents('php://input');
 if ($rawInput === false || $rawInput === '') {
     http_response_code(400);
@@ -75,6 +81,7 @@ try {
 
     echo json_encode(['ok' => true]);
 } catch (Throwable $e) {
+    logTrackContactError('Insert failed: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode(['ok' => false, 'message' => 'DB error']);
 }

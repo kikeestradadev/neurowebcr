@@ -50,6 +50,21 @@ function envValue(string $key, string $default = ''): string
     return $value;
 }
 
+function writeMigrationLog(string $projectRoot, string $message): void
+{
+    $logDir = $projectRoot . '/logs';
+    if (!is_dir($logDir)) {
+        @mkdir($logDir, 0775, true);
+    }
+
+    if (!is_dir($logDir) || !is_writable($logDir)) {
+        return;
+    }
+
+    $line = sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $message);
+    @file_put_contents($logDir . '/migrations.log', $line, FILE_APPEND);
+}
+
 $projectRoot = dirname(__DIR__);
 loadEnvFile($projectRoot);
 
@@ -89,6 +104,10 @@ try {
             break;
         } catch (PDOException $e) {
             $lastException = $e;
+            writeMigrationLog(
+                $projectRoot,
+                sprintf('Server connection failed on host=%s port=%s error=%s', $host, $port, $e->getMessage())
+            );
         }
     }
 
@@ -112,6 +131,10 @@ try {
             break;
         } catch (PDOException $e) {
             $lastException = $e;
+            writeMigrationLog(
+                $projectRoot,
+                sprintf('DB connection failed on host=%s port=%s db=%s error=%s', $host, $port, $dbName, $e->getMessage())
+            );
         }
     }
 
@@ -119,6 +142,7 @@ try {
         throw $lastException ?? new RuntimeException('No se pudo conectar a la base de datos.');
     }
 } catch (Throwable $e) {
+    writeMigrationLog($projectRoot, 'Fatal connection error: ' . $e->getMessage());
     fwrite(STDERR, "Error de conexión MySQL: " . $e->getMessage() . "\n");
     exit(1);
 }
@@ -153,6 +177,7 @@ foreach ($files as $file) {
 
     $sql = file_get_contents($file);
     if ($sql === false) {
+        writeMigrationLog($projectRoot, "Could not read migration file: {$name}");
         fwrite(STDERR, "No se pudo leer la migración: {$name}\n");
         exit(1);
     }
@@ -162,6 +187,7 @@ foreach ($files as $file) {
         $insertStmt->execute(['name' => $name]);
         echo "+ Aplicada: {$name}\n";
     } catch (Throwable $e) {
+        writeMigrationLog($projectRoot, "Error applying {$name}: " . $e->getMessage());
         fwrite(STDERR, "Error aplicando {$name}: " . $e->getMessage() . "\n");
         exit(1);
     }

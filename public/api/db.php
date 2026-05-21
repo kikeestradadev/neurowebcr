@@ -50,6 +50,21 @@ function envValue(string $key, string $default = ''): string
     return $value;
 }
 
+function writeAppLog(string $projectRoot, string $filename, string $message): void
+{
+    $logDir = $projectRoot . '/logs';
+    if (!is_dir($logDir)) {
+        @mkdir($logDir, 0775, true);
+    }
+
+    if (!is_dir($logDir) || !is_writable($logDir)) {
+        return;
+    }
+
+    $line = sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $message);
+    @file_put_contents($logDir . '/' . $filename, $line, FILE_APPEND);
+}
+
 function getDatabaseConnection(): PDO
 {
     static $pdo = null;
@@ -88,6 +103,11 @@ function getDatabaseConnection(): PDO
             return $pdo;
         } catch (PDOException $e) {
             $lastException = $e;
+            writeAppLog(
+                $projectRoot,
+                'mysql_errors.log',
+                sprintf('Connection failed on host=%s port=%s db=%s error=%s', $host, $port, $dbName, $e->getMessage())
+            );
         }
     }
 
