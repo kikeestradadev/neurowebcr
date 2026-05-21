@@ -143,6 +143,26 @@ Notes:
 - Landing URL: `http://localhost/neurowebcr/public/`
 - English: `http://localhost/neurowebcr/public/en/`
 
+### Environment variables (`.env`)
+
+Create local env file from the template:
+
+```bash
+cp .env.example .env
+```
+
+Default local values (XAMPP):
+
+```dotenv
+DB_HOST=localhost
+DB_HOST_FALLBACK=127.0.0.1
+DB_PORT=3306
+DB_NAME=neurowebcr
+DB_USER=root
+DB_PASSWORD=
+DB_CHARSET=utf8mb4
+```
+
 ## MySQL Tracking and Migrations
 
 WhatsApp and email contact CTAs are tracked into MySQL through:
@@ -173,6 +193,19 @@ Current migration for contact events:
 - Database: `neurowebcr`
 - User: `root`
 - Password: empty
+- Source of truth: `.env` (see `.env.example`)
+
+### Production DB config
+
+Production credentials can differ from local. Set the same keys in production environment/config:
+
+- `DB_HOST`
+- `DB_HOST_FALLBACK` (optional)
+- `DB_PORT`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_CHARSET`
 
 ## Production Deploy (cPanel / Apache)
 
