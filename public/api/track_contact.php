@@ -51,7 +51,7 @@ $pageLang = trim((string)($payload['page_lang'] ?? ''));
 $pagePath = trim((string)($payload['page_path'] ?? ''));
 $referrer = trim((string)($payload['referrer_url'] ?? ''));
 
-if (!in_array($leadType, ['whatsapp', 'email'], true)) {
+if (!in_array($leadType, ['whatsapp', 'email', 'phone'], true)) {
     logTrackContactError('Invalid lead_type: ' . $leadType);
     http_response_code(422);
     echo json_encode(['ok' => false, 'message' => 'Invalid lead_type']);

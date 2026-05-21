@@ -228,6 +228,299 @@
 		}
 	};
 
+	const resolveLeadSubmissionEndpoints = () => {
+		const pathname = window.location.pathname || '/';
+		const marker = '/public/';
+		const index = pathname.indexOf(marker);
+		const candidates = [];
+
+		if (index !== -1) {
+			const base = pathname.slice(0, index + marker.length);
+			candidates.push(`${window.location.origin}${base}api/submit_lead.php`);
+		}
+
+		candidates.push(`${window.location.origin}/public/api/submit_lead.php`);
+		candidates.push(`${window.location.origin}/api/submit_lead.php`);
+
+		return Array.from(new Set(candidates));
+	};
+
+	const submitLeadPayload = (payload) => {
+		const body = JSON.stringify(payload);
+		const urls = resolveLeadSubmissionEndpoints();
+
+		if (typeof window.fetch !== 'function' || !urls.length) {
+			return Promise.reject(new Error('fetch unavailable'));
+		}
+
+		const tryIndex = (index) => {
+			if (index >= urls.length) return Promise.reject(new Error('all endpoints failed'));
+			return fetch(urls[index], {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body,
+			})
+				.then((response) => {
+					if (!response.ok) {
+						return tryIndex(index + 1);
+					}
+					return response.json();
+				})
+				.catch(() => tryIndex(index + 1));
+		};
+
+		return tryIndex(0);
+	};
+
+	const initLeadModals = () => {
+		const openButtons = document.querySelectorAll('[data-open-lead-modal]');
+		if (!openButtons.length) return;
+
+		const locale = document.documentElement.lang === 'en' ? 'en' : 'es';
+		const copy = {
+			es: {
+				send: 'Enviar',
+				sending: 'Enviando...',
+				success: 'Gracias. Tu consulta fue enviada correctamente.',
+				error: 'No pudimos enviar tu consulta. Intenta de nuevo.',
+				popupPhone: 'Listo. Selecciona uno de los números para llamar ahora.',
+			},
+			en: {
+				send: 'Send',
+				sending: 'Sending...',
+				success: 'Thanks. Your inquiry was sent successfully.',
+				error: "We couldn't send your inquiry. Please try again.",
+				popupPhone: 'Done. Choose one of the numbers to call now.',
+			},
+		}[locale];
+
+		const openModal = (channel) => {
+			const modal = document.getElementById(`lead-modal-${channel}`);
+			if (!modal) return;
+			const form = modal.querySelector(`.lead-form[data-lead-form="${channel}"]`);
+			const callOptions = modal.querySelector(`[data-call-options="${channel}"]`);
+			const feedback = modal.querySelector(`[data-lead-feedback="${channel}"]`);
+			if (form) form.classList.remove('hidden');
+			if (callOptions) callOptions.classList.add('hidden');
+			if (feedback) feedback.textContent = '';
+			modal.classList.remove('hidden');
+			modal.setAttribute('aria-hidden', 'false');
+			document.body.classList.add('mobile-nav-open');
+		};
+
+		const openInBlank = (url) => {
+			if (!url) return;
+			const win = window.open(url, '_blank', 'noopener,noreferrer');
+			if (!win) {
+				return false;
+			}
+			return true;
+		};
+
+		const closeModal = (channel) => {
+			const modal = document.getElementById(`lead-modal-${channel}`);
+			if (!modal) return;
+			modal.classList.add('hidden');
+			modal.setAttribute('aria-hidden', 'true');
+			document.body.classList.remove('mobile-nav-open');
+		};
+
+		openButtons.forEach((button) => {
+			button.addEventListener('click', () => openModal(button.dataset.openLeadModal));
+		});
+
+		document.querySelectorAll('[data-close-lead-modal]').forEach((button) => {
+			button.addEventListener('click', () => closeModal(button.dataset.closeLeadModal));
+		});
+
+		document.querySelectorAll('.lead-form').forEach((form) => {
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+				const channel = form.dataset.leadForm;
+				const feedback = document.querySelector(`[data-lead-feedback="${channel}"]`);
+				const submit = document.querySelector(`[data-lead-submit="${channel}"]`);
+				const callOptions = document.querySelector(`[data-call-options="${channel}"]`);
+				if (!channel || !feedback || !submit) return;
+
+				if (!form.reportValidity()) return;
+
+				submit.disabled = true;
+				submit.textContent = copy.sending;
+				feedback.textContent = '';
+
+				const data = new FormData(form);
+				const payload = {
+					lead_type: channel,
+					full_name: String(data.get('full_name') || '').trim(),
+					whatsapp_number: String(data.get('whatsapp_number') || '').trim(),
+					phone: String(data.get('phone') || '').trim(),
+					email: String(data.get('email') || '').trim(),
+					message: String(data.get('message') || '').trim(),
+					page_lang: document.documentElement.lang || 'es',
+					page_path: window.location.pathname || '/',
+				};
+
+				submitLeadPayload(payload)
+					.then((result) => {
+						if (!result || !result.ok) throw new Error('invalid response');
+						sendContactLead({
+							lead_type: channel,
+							cta_text: `modal_${channel}`,
+							link_url: window.location.href,
+							page_lang: payload.page_lang,
+							page_path: payload.page_path,
+						});
+						feedback.textContent = copy.success;
+						if (channel === 'phone') {
+							form.classList.add('hidden');
+							if (callOptions) callOptions.classList.remove('hidden');
+							feedback.textContent = copy.popupPhone;
+							return;
+						}
+						form.reset();
+						window.setTimeout(() => {
+							closeModal(channel);
+							if (channel === 'whatsapp') {
+								const target = document.querySelector('[data-open-lead-modal="whatsapp"]');
+								const fallback = document.querySelector('a[href*="wa.me/"]');
+								let destination = '';
+								if (target && target.dataset && target.dataset.whatsappUrl) {
+									destination = target.dataset.whatsappUrl;
+								} else if (fallback && fallback.href) {
+									destination = fallback.href;
+								}
+
+								if (destination) {
+									try {
+										const url = new URL(destination, window.location.origin);
+										const defaultText = String(url.searchParams.get('text') || '').trim();
+										const userName = String(payload.full_name || '').trim();
+										const userMessage = String(payload.message || '').trim();
+										const composedMessage = `${defaultText} ${userName ? `Mi nombre es ${userName}, ` : ''}${userMessage}`.trim();
+										if (composedMessage) {
+											url.searchParams.set('text', composedMessage);
+										}
+										const opened = openInBlank(url.toString());
+										if (!opened) {
+											feedback.textContent = 'Habilita popups para abrir WhatsApp en una nueva pestaña.';
+										}
+									} catch (_e) {
+										const opened = openInBlank(destination);
+										if (!opened) {
+											feedback.textContent = 'Habilita popups para abrir WhatsApp en una nueva pestaña.';
+										}
+									}
+								}
+							} else if (channel === 'email') {
+								const trigger = document.querySelector('[data-open-lead-modal="email"]');
+								const baseMailto = trigger?.dataset?.emailUrl || 'mailto:hello@neurowebcr.com';
+								const subject = encodeURIComponent(`Consulta desde web - ${payload.full_name || ''}`.trim());
+								const bodyText = `Nombre: ${payload.full_name || ''}\nTeléfono: ${payload.phone || ''}\nCorreo: ${payload.email || ''}\n\nMensaje:\n${payload.message || ''}`;
+								const body = encodeURIComponent(bodyText);
+								const sep = baseMailto.includes('?') ? '&' : '?';
+								const opened = openInBlank(`${baseMailto}${sep}subject=${subject}&body=${body}`);
+								if (!opened) {
+									feedback.textContent = 'Habilita popups para abrir tu cliente de correo en una nueva pestaña.';
+								}
+							}
+						}, 900);
+					})
+					.catch(() => {
+						feedback.textContent = copy.error;
+					})
+					.finally(() => {
+						submit.disabled = false;
+						submit.textContent = copy.send;
+					});
+			});
+		});
+
+		document.querySelectorAll('[data-lead-request-contact="phone"]').forEach((button) => {
+			button.addEventListener('click', () => {
+				const form = document.querySelector('.lead-form[data-lead-form="phone"]');
+				const feedback = document.querySelector('[data-lead-feedback="phone"]');
+				if (!form || !feedback) return;
+				if (!form.reportValidity()) return;
+
+				const data = new FormData(form);
+				const payload = {
+					lead_type: 'phone',
+					full_name: String(data.get('full_name') || '').trim(),
+					phone: String(data.get('phone') || '').trim(),
+					message: 'Deseo ser contactado',
+					page_lang: document.documentElement.lang || 'es',
+					page_path: window.location.pathname || '/',
+				};
+
+				button.disabled = true;
+				submitLeadPayload(payload)
+					.then((result) => {
+						if (!result || !result.ok) throw new Error('invalid response');
+						sendContactLead({
+							lead_type: 'phone',
+							cta_text: 'modal_phone_request_contact',
+							link_url: window.location.href,
+							page_lang: payload.page_lang,
+							page_path: payload.page_path,
+						});
+						feedback.textContent = copy.success;
+						form.reset();
+						window.setTimeout(() => closeModal('phone'), 900);
+					})
+					.catch(() => {
+						feedback.textContent = copy.error;
+					})
+					.finally(() => {
+						button.disabled = false;
+					});
+			});
+		});
+
+		document.querySelectorAll('[data-copy-phone]').forEach((button) => {
+			button.addEventListener('click', async () => {
+				const value = button.dataset.copyPhone || '';
+				if (!value) return;
+				try {
+					if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+						await navigator.clipboard.writeText(value);
+					} else {
+						const tmp = document.createElement('textarea');
+						tmp.value = value;
+						document.body.appendChild(tmp);
+						tmp.select();
+						document.execCommand('copy');
+						document.body.removeChild(tmp);
+					}
+					const originalTitle = button.getAttribute('title') || '';
+					button.setAttribute('title', 'Copiado');
+					sendContactLead({
+						lead_type: 'phone',
+						cta_text: 'phone_copy',
+						link_url: `copy:${value}`,
+						page_lang: document.documentElement.lang || 'es',
+						page_path: window.location.pathname || '/',
+					});
+					window.alert(locale === 'en' ? 'Number copied.' : 'Número copiado.');
+					window.setTimeout(() => button.setAttribute('title', originalTitle), 1200);
+				} catch (_e) {
+					window.alert(locale === 'en' ? 'Could not copy the number.' : 'No se pudo copiar el número.');
+				}
+			});
+		});
+
+		document.querySelectorAll('.lead-call-options__link[href^="tel:"]').forEach((link) => {
+			link.addEventListener('click', () => {
+				sendContactLead({
+					lead_type: 'phone',
+					cta_text: 'phone_call_click',
+					link_url: link.getAttribute('href') || '',
+					page_lang: document.documentElement.lang || 'es',
+					page_path: window.location.pathname || '/',
+				});
+			});
+		});
+	};
+
 	const textFromNode = (node) => (node?.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120);
 
 	const initFunnelTracking = () => {
@@ -309,4 +602,5 @@
 	initMobileMenu();
 	initPortfolioSwiper();
 	initFunnelTracking();
+	initLeadModals();
 })();
