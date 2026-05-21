@@ -13,6 +13,7 @@ block config
 	-let ogImage			= seoOgImage || (siteUrl + '/images/logo_b_h.png')
 	-let ogLocale			= seoOgLocale || (locale === 'es' ? 'es_CR' : 'en_US')
 	-let ogLocaleAlternate	= seoOgLocaleAlternate || (locale === 'es' ? 'en_US' : 'es_CR')
+	-let assetVersion		= buildVersion || Date.now().toString()
 doctype html
 html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light')
 	head
@@ -68,7 +69,7 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 		link(rel="preconnect" href="https://fonts.googleapis.com")
 		link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
 		link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet")
-		link(rel="stylesheet" href=assetBase + "tailwind-dist.css")
+		link(rel="stylesheet" href=assetBase + "tailwind-dist.css?v=" + assetVersion)
 		-
 			const socialProfiles = [
 				t.footer.socialInstagram,
@@ -173,5 +174,5 @@ html(lang=locale prefix='og: http://ogp.me/ns#' class='no-js' data-theme='light'
 			block main-container
 		block main-footer
 		script(src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer)
-		script(src=assetBase + "site.js" defer)
+		script(src=assetBase + "site.js?v=" + assetVersion defer)
 		block scripts
