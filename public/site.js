@@ -171,21 +171,53 @@
 		window.gtag('event', eventName, params || {});
 	};
 
-	const resolveTrackingEndpoints = () => {
+	const resolveApiBaseCandidates = () => {
+		const candidates = [];
+		const origin = window.location.origin;
 		const pathname = window.location.pathname || '/';
 		const marker = '/public/';
 		const index = pathname.indexOf(marker);
-		const candidates = [];
+
+		const pushSafe = (value) => {
+			if (typeof value !== 'string' || value.trim() === '') return;
+			candidates.push(value);
+		};
+
+		pushSafe(`${origin}/`);
+		pushSafe(`${origin}/public/`);
 
 		if (index !== -1) {
 			const base = pathname.slice(0, index + marker.length);
-			candidates.push(`${window.location.origin}${base}api/track_contact.php`);
+			pushSafe(`${origin}${base}`);
 		}
 
-		candidates.push(`${window.location.origin}/public/api/track_contact.php`);
-		candidates.push(`${window.location.origin}/api/track_contact.php`);
+		const scriptTag = Array.from(document.scripts).find((script) => /site\.js(\?|$)/.test(script.src || ''));
+		if (scriptTag && scriptTag.src) {
+			try {
+				const scriptUrl = new URL(scriptTag.src, window.location.href);
+				const scriptDir = scriptUrl.href.slice(0, scriptUrl.href.lastIndexOf('/') + 1);
+				pushSafe(scriptDir);
+				if (scriptDir.endsWith('/public/')) {
+					pushSafe(scriptDir.replace(/\/public\/$/, '/'));
+				}
+			} catch (_e) {
+				// Ignore malformed script URL
+			}
+		}
 
 		return Array.from(new Set(candidates));
+	};
+
+	const resolveTrackingEndpoints = () => {
+		const bases = resolveApiBaseCandidates();
+		return Array.from(
+			new Set(
+				bases.flatMap((base) => [
+					`${base}api/track_contact.php`,
+					`${base}public/api/track_contact.php`,
+				])
+			)
+		);
 	};
 
 	const sendContactLead = (params) => {
@@ -229,20 +261,15 @@
 	};
 
 	const resolveLeadSubmissionEndpoints = () => {
-		const pathname = window.location.pathname || '/';
-		const marker = '/public/';
-		const index = pathname.indexOf(marker);
-		const candidates = [];
-
-		if (index !== -1) {
-			const base = pathname.slice(0, index + marker.length);
-			candidates.push(`${window.location.origin}${base}api/submit_lead.php`);
-		}
-
-		candidates.push(`${window.location.origin}/public/api/submit_lead.php`);
-		candidates.push(`${window.location.origin}/api/submit_lead.php`);
-
-		return Array.from(new Set(candidates));
+		const bases = resolveApiBaseCandidates();
+		return Array.from(
+			new Set(
+				bases.flatMap((base) => [
+					`${base}api/submit_lead.php`,
+					`${base}public/api/submit_lead.php`,
+				])
+			)
+		);
 	};
 
 	const submitLeadPayload = (payload) => {
