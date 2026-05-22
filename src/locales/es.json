@@ -250,6 +250,16 @@
 		"modalEmailTitle": "Consulta por correo",
 		"modalPhoneTitle": "Llamar ahora mismo",
 		"fieldName": "Nombre",
+		"fieldService": "Servicio de interés",
+		"servicePlaceholder": "Selecciona un servicio",
+		"serviceOptions": [
+			"Desarrollo web orientado a conversión",
+			"Agentes IA para atención, ventas y procesos internos",
+			"Automatización de flujos operativos",
+			"Consultoría digital, datos y cumplimiento",
+			"Comercio Electrónico y Blockchain",
+			"Otros"
+		],
 		"fieldWhatsapp": "Número de WhatsApp",
 		"fieldPhone": "Teléfono",
 		"fieldEmail": "Correo electrónico",

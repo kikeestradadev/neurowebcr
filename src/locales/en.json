@@ -250,6 +250,16 @@
 		"modalEmailTitle": "Email inquiry",
 		"modalPhoneTitle": "Call right now",
 		"fieldName": "Name",
+		"fieldService": "Service of interest",
+		"servicePlaceholder": "Select a service",
+		"serviceOptions": [
+			"Conversion-oriented web development",
+			"AI agents for support, sales, and internal processes",
+			"Operational workflow automation",
+			"Digital, data, and compliance consulting",
+			"E-commerce and Blockchain",
+			"Others"
+		],
 		"fieldWhatsapp": "WhatsApp number",
 		"fieldPhone": "Phone",
 		"fieldEmail": "Email",

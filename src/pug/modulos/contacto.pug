@@ -52,6 +52,11 @@ section(id='contacto' class='section-base relative py-20 l:py-28 pattern-dots')
 					form(class='lead-form' data-lead-form='whatsapp' novalidate)
 						label(class='lead-modal__label' for='lead-whatsapp-name')= t.contact.fieldName
 						input(id='lead-whatsapp-name' name='full_name' type='text' required class='lead-modal__input')
+						label(class='lead-modal__label' for='lead-whatsapp-service')= t.contact.fieldService
+						select(id='lead-whatsapp-service' name='service_interest' required class='lead-modal__input')
+							option(value='')= t.contact.servicePlaceholder
+							each serviceOption in t.contact.serviceOptions
+								option(value=serviceOption)= serviceOption
 						label(class='lead-modal__label' for='lead-whatsapp-number')= t.contact.fieldWhatsapp
 						input(id='lead-whatsapp-number' name='whatsapp_number' type='text' required class='lead-modal__input')
 						label(class='lead-modal__label' for='lead-whatsapp-message')= t.contact.fieldMessage
@@ -68,6 +73,11 @@ section(id='contacto' class='section-base relative py-20 l:py-28 pattern-dots')
 					form(class='lead-form' data-lead-form='email' novalidate)
 						label(class='lead-modal__label' for='lead-email-name')= t.contact.fieldName
 						input(id='lead-email-name' name='full_name' type='text' required class='lead-modal__input')
+						label(class='lead-modal__label' for='lead-email-service')= t.contact.fieldService
+						select(id='lead-email-service' name='service_interest' required class='lead-modal__input')
+							option(value='')= t.contact.servicePlaceholder
+							each serviceOption in t.contact.serviceOptions
+								option(value=serviceOption)= serviceOption
 						label(class='lead-modal__label' for='lead-email-phone')= t.contact.fieldPhone
 						input(id='lead-email-phone' name='phone' type='text' required class='lead-modal__input')
 						label(class='lead-modal__label' for='lead-email-address')= t.contact.fieldEmail
@@ -86,6 +96,11 @@ section(id='contacto' class='section-base relative py-20 l:py-28 pattern-dots')
 					form(class='lead-form' data-lead-form='phone' novalidate)
 						label(class='lead-modal__label' for='lead-phone-name')= t.contact.fieldName
 						input(id='lead-phone-name' name='full_name' type='text' required class='lead-modal__input')
+						label(class='lead-modal__label' for='lead-phone-service')= t.contact.fieldService
+						select(id='lead-phone-service' name='service_interest' required class='lead-modal__input')
+							option(value='')= t.contact.servicePlaceholder
+							each serviceOption in t.contact.serviceOptions
+								option(value=serviceOption)= serviceOption
 						label(class='lead-modal__label' for='lead-phone-number')= t.contact.fieldPhoneOnly
 						input(id='lead-phone-number' name='phone' type='text' required class='lead-modal__input')
 						p(class='lead-modal__feedback' data-lead-feedback='phone' aria-live='polite')

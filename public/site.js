@@ -285,8 +285,10 @@
 				error: 'No pudimos enviar tu consulta. Intenta de nuevo.',
 				popupPhone: 'Listo. Selecciona uno de los números para llamar ahora.',
 				waNamePrefix: 'Mi nombre es',
+				waServicePrefix: 'Servicio de interés',
 				mailSubjectPrefix: 'Consulta desde web',
 				mailFieldName: 'Nombre',
+				mailFieldService: 'Servicio de interés',
 				mailFieldPhone: 'Teléfono',
 				mailFieldEmail: 'Correo',
 				mailFieldMessage: 'Mensaje',
@@ -300,8 +302,10 @@
 				error: "We couldn't send your inquiry. Please try again.",
 				popupPhone: 'Done. Choose one of the numbers to call now.',
 				waNamePrefix: 'My name is',
+				waServicePrefix: 'Service of interest',
 				mailSubjectPrefix: 'Website inquiry',
 				mailFieldName: 'Name',
+				mailFieldService: 'Service of interest',
 				mailFieldPhone: 'Phone',
 				mailFieldEmail: 'Email',
 				mailFieldMessage: 'Message',
@@ -368,6 +372,7 @@
 				const payload = {
 					lead_type: channel,
 					full_name: String(data.get('full_name') || '').trim(),
+					service_interest: String(data.get('service_interest') || '').trim(),
 					whatsapp_number: String(data.get('whatsapp_number') || '').trim(),
 					phone: String(data.get('phone') || '').trim(),
 					email: String(data.get('email') || '').trim(),
@@ -411,9 +416,11 @@
 										const url = new URL(destination, window.location.origin);
 										const defaultText = String(url.searchParams.get('text') || '').trim();
 										const userName = String(payload.full_name || '').trim();
+										const serviceInterest = String(payload.service_interest || '').trim();
 										const userMessage = String(payload.message || '').trim();
 										const nameChunk = userName ? `${copy.waNamePrefix} ${userName}, ` : '';
-										const composedMessage = `${defaultText} ${nameChunk}${userMessage}`.trim();
+										const serviceChunk = serviceInterest ? `${copy.waServicePrefix}: ${serviceInterest}. ` : '';
+										const composedMessage = `${defaultText} ${nameChunk}${serviceChunk}${userMessage}`.trim();
 										if (composedMessage) {
 											url.searchParams.set('text', composedMessage);
 										}
@@ -432,7 +439,7 @@
 								const trigger = document.querySelector('[data-open-lead-modal="email"]');
 								const baseMailto = trigger?.dataset?.emailUrl || 'mailto:hello@neurowebcr.com';
 								const subject = encodeURIComponent(`${copy.mailSubjectPrefix} - ${payload.full_name || ''}`.trim());
-								const bodyText = `${copy.mailFieldName}: ${payload.full_name || ''}\n${copy.mailFieldPhone}: ${payload.phone || ''}\n${copy.mailFieldEmail}: ${payload.email || ''}\n\n${copy.mailFieldMessage}:\n${payload.message || ''}`;
+								const bodyText = `${copy.mailFieldName}: ${payload.full_name || ''}\n${copy.mailFieldService}: ${payload.service_interest || ''}\n${copy.mailFieldPhone}: ${payload.phone || ''}\n${copy.mailFieldEmail}: ${payload.email || ''}\n\n${copy.mailFieldMessage}:\n${payload.message || ''}`;
 								const body = encodeURIComponent(bodyText);
 								const sep = baseMailto.includes('?') ? '&' : '?';
 								const opened = openInBlank(`${baseMailto}${sep}subject=${subject}&body=${body}`);
@@ -463,6 +470,7 @@
 				const payload = {
 					lead_type: 'phone',
 					full_name: String(data.get('full_name') || '').trim(),
+					service_interest: String(data.get('service_interest') || '').trim(),
 					phone: String(data.get('phone') || '').trim(),
 					message: 'Deseo ser contactado',
 					page_lang: document.documentElement.lang || 'es',

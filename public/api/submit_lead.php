@@ -36,6 +36,7 @@ $whatsappNumber = trim((string)($payload['whatsapp_number'] ?? ''));
 $phone = trim((string)($payload['phone'] ?? ''));
 $email = trim((string)($payload['email'] ?? ''));
 $message = trim((string)($payload['message'] ?? ''));
+$serviceInterest = trim((string)($payload['service_interest'] ?? ''));
 $pageLang = trim((string)($payload['page_lang'] ?? ''));
 $pagePath = trim((string)($payload['page_path'] ?? ''));
 
@@ -45,6 +46,10 @@ if (!in_array($leadType, ['whatsapp', 'email', 'phone'], true)) {
 
 if ($fullName === '' || $pageLang === '' || $pagePath === '') {
     leadError('Missing required fields');
+}
+
+if ($serviceInterest === '') {
+    leadError('Service interest is required');
 }
 
 if ($leadType === 'whatsapp' && $whatsappNumber === '') {
@@ -69,6 +74,7 @@ $whatsappNumber = mb_substr($whatsappNumber, 0, 40);
 $phone = mb_substr($phone, 0, 40);
 $email = mb_substr($email, 0, 180);
 $message = mb_substr($message, 0, 3000);
+$serviceInterest = mb_substr($serviceInterest, 0, 140);
 $pageLang = mb_substr($pageLang, 0, 10);
 $pagePath = mb_substr($pagePath, 0, 255);
 $userAgent = mb_substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 512);
@@ -77,25 +83,69 @@ $createdAt = date('Y-m-d H:i:s');
 
 try {
     $pdo = getDatabaseConnection();
-    $stmt = $pdo->prepare(
-        'INSERT INTO lead_submissions '
-        . '(lead_type, full_name, whatsapp_number, phone, email, message, page_lang, page_path, ip_address, user_agent, created_at) '
-        . 'VALUES (:lead_type, :full_name, :whatsapp_number, :phone, :email, :message, :page_lang, :page_path, :ip_address, :user_agent, :created_at)'
-    );
+    $table = trim((string)$pdo->query('SELECT DATABASE()')->fetchColumn());
+    $hasServiceInterestColumn = false;
 
-    $stmt->execute([
-        'lead_type' => $leadType,
-        'full_name' => $fullName,
-        'whatsapp_number' => $leadType === 'whatsapp' ? $whatsappNumber : null,
-        'phone' => in_array($leadType, ['email', 'phone'], true) ? $phone : null,
-        'email' => $leadType === 'email' ? $email : null,
-        'message' => $message !== '' ? $message : 'Solicitud de llamada',
-        'page_lang' => $pageLang,
-        'page_path' => $pagePath,
-        'ip_address' => $ipAddress !== '' ? $ipAddress : null,
-        'user_agent' => $userAgent !== '' ? $userAgent : null,
-        'created_at' => $createdAt,
-    ]);
+    if ($table !== '') {
+        $checkColumn = $pdo->prepare(
+            'SELECT 1 FROM information_schema.COLUMNS '
+            . 'WHERE TABLE_SCHEMA = :schema AND TABLE_NAME = :table AND COLUMN_NAME = :column LIMIT 1'
+        );
+        $checkColumn->execute([
+            'schema' => $table,
+            'table' => 'lead_submissions',
+            'column' => 'service_interest',
+        ]);
+        $hasServiceInterestColumn = (bool)$checkColumn->fetchColumn();
+    }
+
+    $finalMessage = $message !== '' ? $message : 'Solicitud de llamada';
+    if (!$hasServiceInterestColumn) {
+        $finalMessage = '[Servicio de interés: ' . $serviceInterest . "]\n" . $finalMessage;
+    }
+
+    if ($hasServiceInterestColumn) {
+        $stmt = $pdo->prepare(
+            'INSERT INTO lead_submissions '
+            . '(lead_type, full_name, service_interest, whatsapp_number, phone, email, message, page_lang, page_path, ip_address, user_agent, created_at) '
+            . 'VALUES (:lead_type, :full_name, :service_interest, :whatsapp_number, :phone, :email, :message, :page_lang, :page_path, :ip_address, :user_agent, :created_at)'
+        );
+
+        $stmt->execute([
+            'lead_type' => $leadType,
+            'full_name' => $fullName,
+            'service_interest' => $serviceInterest,
+            'whatsapp_number' => $leadType === 'whatsapp' ? $whatsappNumber : null,
+            'phone' => in_array($leadType, ['email', 'phone'], true) ? $phone : null,
+            'email' => $leadType === 'email' ? $email : null,
+            'message' => $finalMessage,
+            'page_lang' => $pageLang,
+            'page_path' => $pagePath,
+            'ip_address' => $ipAddress !== '' ? $ipAddress : null,
+            'user_agent' => $userAgent !== '' ? $userAgent : null,
+            'created_at' => $createdAt,
+        ]);
+    } else {
+        $stmt = $pdo->prepare(
+            'INSERT INTO lead_submissions '
+            . '(lead_type, full_name, whatsapp_number, phone, email, message, page_lang, page_path, ip_address, user_agent, created_at) '
+            . 'VALUES (:lead_type, :full_name, :whatsapp_number, :phone, :email, :message, :page_lang, :page_path, :ip_address, :user_agent, :created_at)'
+        );
+
+        $stmt->execute([
+            'lead_type' => $leadType,
+            'full_name' => $fullName,
+            'whatsapp_number' => $leadType === 'whatsapp' ? $whatsappNumber : null,
+            'phone' => in_array($leadType, ['email', 'phone'], true) ? $phone : null,
+            'email' => $leadType === 'email' ? $email : null,
+            'message' => $finalMessage,
+            'page_lang' => $pageLang,
+            'page_path' => $pagePath,
+            'ip_address' => $ipAddress !== '' ? $ipAddress : null,
+            'user_agent' => $userAgent !== '' ? $userAgent : null,
+            'created_at' => $createdAt,
+        ]);
+    }
 
     echo json_encode(['ok' => true]);
 } catch (Throwable $e) {
