@@ -1,169 +1,305 @@
 # NeuroWebCR — Landing Page
 
-Corporate landing page built with **light/dark theme**, modular Pug, Sass, Tailwind CSS 4, and Swiper.
+Corporate bilingual landing page for **NeuroWeb Costa Rica** (web development, AI agents, automation).
 
-**Demo:** https://neurowebcr.com/
+**Production:** https://neurowebcr.com/
 
-Operational guardrails for future changes:
-- `CHANGE_GUARDRAILS.md`
+---
 
-## Stack and Build Flow (Prepros)
+## For AI Agents — Quick Reference
+
+Use this section to orient yourself before making changes.
+
+| Topic | Value |
+|-------|-------|
+| **Architecture** | Static HTML/CSS/JS frontend + PHP REST endpoints + MySQL |
+| **Source of truth** | `public/` — edit files directly; there is **no** build step, **no** Pug, **no** `src/`, **no** `package.json` |
+| **Spanish page** | `public/index.html` → `/` |
+| **English page** | `public/en/index.html` → `/en/` |
+| **Shared assets** | `public/styles.css`, `public/site.js`, `public/images/` (EN page references them via `../`) |
+| **Runtime JS** | `public/site.js` (theme, menu, Swiper, lead modals, GA4, contact tracking) |
+| **Backend API** | `public/api/track_contact.php`, `public/api/submit_lead.php` |
+| **Database config** | Root `.env` (see `.env.example`) |
+| **Migrations** | `scripts/migrations/*.sql` → run with `php scripts/run_migrations.php` |
+| **SEO artifacts** | Embedded in HTML `<head>` + `public/robots.txt` + `public/sitemap.xml` |
+| **Deploy target** | Upload **contents of `public/`** to Apache docroot (cPanel shared hosting) |
+| **Guardrails** | See `CHANGE_GUARDRAILS.md`, `AI_ENVIRONMENT_CONTEXT.md`, `AI_DATABASE_INSTRUCTIONS.md` |
+
+### Rules agents must follow
+
+1. **Content or copy changes** → edit both `public/index.html` and `public/en/index.html`.
+2. **SEO metadata** (title, description, OG, JSON-LD) lives inside each HTML file's `<head>` — update both languages.
+3. **CSS changes** → edit `public/styles.css` and bump its cache-buster (`?v=YYYYMMDD`) in both HTML files.
+4. **JS changes** → edit `public/site.js`; consider adding or bumping a `?v=` query param in both HTML files to avoid stale cache in production.
+5. **Schema changes** → new SQL file in `scripts/migrations/`, never edit applied migrations.
+6. **Do not assume** MySQL is unavailable locally — this project uses XAMPP; verify connectivity before reporting DB failures.
+7. **Legacy files** (`prepros.config`, docs mentioning Pug/npm) are outdated — ignore them.
+
+---
+
+## Architecture
 
 ```text
-src/pug/          →  public/index.html        (Pug)
-src/styles/       →  styles.css               (Sass / Prepros)
-tailwind.css      →  public/tailwind-dist.css (Tailwind CLI)
-src/js/           →  public/index-dist.js     (Prepros / bundler)
-public/site.js    →  theme + menu + Swiper
+Browser
+  │
+  ├── public/index.html          (ES)  ─┐
+  ├── public/en/index.html       (EN)  ─┤ static HTML sections
+  ├── public/styles.css                ─┤ Tailwind 4 compiled CSS + --nw-* theme tokens
+  ├── public/site.js                   ─┤ vanilla JS (no bundler)
+  └── CDN: Swiper 11, Google Fonts, GA4
+  │
+  └── fetch POST ──► public/api/track_contact.php   (click tracking)
+                 └──► public/api/submit_lead.php    (lead form submissions)
+                           │
+                           ▼
+                     MySQL (neurowebcr)
+                           │
+                           ▼
+                     logs/ (runtime, not in git)
 ```
 
-### Prepros/Pug guardrails (important)
+There is **no Node/npm build pipeline** in this repository. The site is served as static files from Apache with PHP endpoints for persistence.
 
-- Source of truth is `src/` (`src/pug`, `src/styles`, `src/js`).
-- Do not implement permanent changes by editing generated HTML in `public/` manually.
-- After template or tracking changes, regenerate outputs (`npm run build:pug` or `npm run build`) and verify both:
-  - `public/index.html`
-  - `public/en/index.html`
-- Keep asset versioning active (`site.js?v=...`, `tailwind-dist.css?v=...`) to prevent stale-cache deploy issues.
+### What changed from the legacy stack
 
-### Prepros Order (recommended flow)
+Previously the project used **Pug templates**, **Sass**, **Tailwind CLI**, and **Prepros** under a `src/` directory with npm scripts. That pipeline was removed. All markup, styles, and client logic now live as committed artifacts under `public/`.
 
-1. `src/styles/styles.scss` → `src/styles/styles.css`
-2. `src/styles/tailwind.css` → `public/tailwind-dist.css`
-3. `src/pug/pages/index.pug` → `public/index.html`
+---
 
-Prepros does **not** generate `public/en/index.html` automatically. Run once per session:
+## Repository Structure
 
-```bash
-npm run build:pug
+```text
+neurowebcr/
+├── public/                      # Deploy root — everything served to the web
+│   ├── index.html               # Spanish landing (canonical /)
+│   ├── en/
+│   │   └── index.html           # English landing (/en/)
+│   ├── styles.css               # Compiled Tailwind 4 + custom components + theme tokens
+│   ├── site.js                  # All client-side runtime logic
+│   ├── robots.txt               # Crawler directives
+│   ├── sitemap.xml              # ES + EN URLs with hreflang annotations
+│   ├── sitemap.xsl              # Human-readable sitemap stylesheet
+│   ├── .htaccess                # HTTPS, www normalization, local cache bypass
+│   ├── api/
+│   │   ├── db.php               # PDO connection, .env loader, logging helpers
+│   │   ├── track_contact.php    # POST: CTA click events
+│   │   └── submit_lead.php      # POST: lead form submissions
+│   ├── assets/
+│   │   └── sprite.svg           # Inline SVG sprite
+│   └── images/                  # Logos, favicon, team photos, portfolio thumbnails
+│       ├── logo_b_h.png         # Black horizontal (light theme header)
+│       ├── logo_b_v.png         # Black vertical watermark (light hero)
+│       ├── logo_w_h.png         # White horizontal (dark theme / footer)
+│       ├── logo_w_v.png         # White vertical watermark (dark hero)
+│       ├── ico.png              # Favicon
+│       └── pf/                  # Portfolio project images
+│
+├── scripts/
+│   ├── run_migrations.php       # Applies SQL migrations idempotently
+│   └── migrations/              # Incremental schema changes
+│       ├── 20260521_001_create_contact_click_events.sql
+│       ├── 20260521_002_create_lead_submissions.sql
+│       ├── 20260521_003_add_phone_lead_type.sql
+│       └── 20260521_004_add_service_interest_to_leads.sql
+│
+├── logs/                        # Runtime logs (gitignored content; create on server)
+├── .env                         # Local/production secrets (gitignored)
+├── .env.example                 # Template for DB and timezone config
+├── CHANGE_GUARDRAILS.md         # Sensitive files and verification checklists
+├── AI_ENVIRONMENT_CONTEXT.md    # Local vs production rules for agents
+├── AI_DATABASE_INSTRUCTIONS.md  # Migration workflow for agents
+└── CHANGELOG.md                 # Release history
 ```
 
-`npm run build*` scripts are optional if you prefer terminal-based builds.
+---
 
-## Theme Structure
+## Tech Stack
 
-| File | Role |
-|------|------|
-| `src/styles/core/_theme.scss` | CSS tokens `--nw-*` (light/dark) |
-| `src/styles/components/_logo.scss` | Theme-based logo visibility |
-| `src/styles/components/_theme-toggle.scss` | Sun/moon toggle styles |
-| `src/js/core-modules/themeModule.js` | Theme logic (ES modules) |
-| `public/site.js` | Runtime logic for deploy without bundler |
-| `src/pug/config/_branding.pug` | Logo paths |
-| `src/pug/mixins/logo.pug` | `+logoHorizontal`, etc. |
-| `src/pug/mixins/theme-toggle.pug` | `+themeToggle` |
+| Layer | Technology |
+|-------|------------|
+| Markup | Static HTML5 (hand-authored, bilingual) |
+| CSS | Tailwind CSS 4 (pre-compiled into `public/styles.css`) |
+| JS | Vanilla ES5-compatible IIFE in `public/site.js` |
+| Carousel | Swiper 11 (CDN) |
+| Fonts | Inter + Space Grotesk (Google Fonts CDN) |
+| Analytics | Google Analytics 4 (`G-3GGD52GQ13`) + Consent Mode v2 |
+| Server | Apache + PHP 8+ |
+| Database | MySQL / MariaDB via PDO |
+| Hosting | cPanel shared hosting (production) |
 
-### Logos (`public/images/`)
+---
 
-| File | Usage |
-|------|------|
-| `logo_b_h.png` | Black horizontal logo (light theme header) |
-| `logo_b_v.png` | Black vertical watermark (light hero) |
-| `logo_w_h.png` | White horizontal logo (dark theme/footer) |
-| `logo_w_v.png` | White vertical watermark (dark hero) |
+## Page Structure (both languages)
 
-### Semantic Tailwind Classes
+Both HTML files share the same section IDs and layout. Only text content and `lang` attributes differ.
 
-Use token-driven classes:
+| Section ID | Content |
+|------------|---------|
+| `#inicio` | Hero — headline, subtitle, CTAs, stats |
+| `#servicios` | Service cards (5 services) |
+| `#confianza` | Trust / value propositions |
+| `#portafolio` | Portfolio Swiper carousel |
+| `#equipo` | Team / founders |
+| `#faq` | FAQ accordion |
+| `#legal` | Privacy policy |
+| `#contacto` | Contact cards + lead capture modals (WhatsApp, email, phone) |
+
+### Lead capture modals
+
+Contact CTAs open modals (`data-open-lead-modal="whatsapp|email"`) defined in the `#contacto` section. Submissions POST to `submit_lead.php`. Direct link clicks (e.g. `wa.me`, `mailto:`) are tracked via `track_contact.php`.
+
+---
+
+## Theme System (light / dark)
+
+| Mechanism | Location |
+|-----------|----------|
+| CSS tokens `--nw-*` | `public/styles.css` (`:root` / `[data-theme=light]` / `[data-theme=dark]`) |
+| Theme attribute | `document.documentElement[data-theme]` |
+| Anti-flash script | Inline `<script>` in `<head>` of each HTML file |
+| Toggle UI | `[data-theme-toggle]` buttons in header |
+| Persistence | `localStorage` key `nw-theme` (`light` \| `dark`) |
+| Fallback | `prefers-color-scheme` when no stored preference |
+| Logo swap | `.logo__img--light` / `.logo__img--dark` visibility via CSS |
+
+### Semantic utility classes
+
+Prefer token-driven classes over hardcoded colors:
 
 - `bg-nw-bg`, `bg-nw-surface`, `text-nw-text`, `text-nw-text-muted`
 - `bg-nw-accent`, `border-nw-surface-muted`
-- `section-band` for portfolio/footer contrast section
+- `section-band`, `section-band-muted` for portfolio/footer contrast sections
 
-Avoid fixed `bg-white` / `text-black` unless intentionally required.
+---
 
-### Persistence
+## Internationalization (ES / EN)
 
-- `localStorage` key: `nw-theme` (`light` | `dark`)
-- If no stored value exists, `prefers-color-scheme` is used
-- Inline `<head>` script prevents theme flash
+| Language | URL | File | `lang` attribute |
+|----------|-----|------|------------------|
+| Spanish (default) | `/` | `public/index.html` | `es` |
+| English | `/en/` | `public/en/index.html` | `en` |
 
-## Languages (ES / EN)
+- Language switcher in header links between `./` and `./en/`.
+- EN page uses relative paths (`../styles.css`, `../site.js`, `../images/...`) for shared assets.
+- SEO hreflang tags in both files: `es`, `en`, `x-default` (default → Spanish).
+- **Any content change must be mirrored in both files.**
 
-The landing is generated in two language variants:
+---
 
-| Language | Local URL | Output |
-|----------|-----------|--------|
-| Spanish | `/` | `public/index.html` |
-| English | `/en/` | `public/en/index.html` |
+## SEO
 
-Content source:
+SEO is **embedded directly in each HTML file** — there is no build-time generator.
 
-- `src/locales/es.json`
-- `src/locales/en.json`
+### Implemented in `<head>`
 
-Build:
+- `<title>`, `<meta name="description">`, `<meta name="robots">`
+- Canonical URL and hreflang alternates (absolute URLs to `https://neurowebcr.com/`)
+- Open Graph: `og:title`, `og:site_name`, `og:description`, `og:type`, `og:url`, `og:image`, `og:locale`, `og:locale:alternate`
+- Twitter Card: `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
+- Geo meta tags (Costa Rica / Alajuela)
+- JSON-LD `@graph` with: `Organization`, `ProfessionalService`, `WebSite`, `WebPage`, five `Service` nodes
 
-```bash
-npm run build:pug
+### Crawler files
+
+| File | Purpose |
+|------|---------|
+| `public/robots.txt` | Allows all; points to sitemap |
+| `public/sitemap.xml` | ES + EN URLs with `xhtml:link` hreflang entries |
+| `public/sitemap.xsl` | Browser-friendly sitemap view |
+
+### Apache rules (`public/.htaccess`)
+
+- Force HTTPS (dynamic host, no hardcoded domain)
+- Strip `www.` prefix (301)
+- **Disabled on** `localhost` / `127.0.0.1`
+- No-cache headers on local dev to avoid stale assets while iterating
+
+### SEO maintenance checklist
+
+When changing titles, descriptions, or services:
+
+1. Update `<title>`, meta description, OG/Twitter tags in **both** HTML files.
+2. Update the JSON-LD block in **both** HTML files (keep `@id` URLs consistent).
+3. Update `lastmod` in `public/sitemap.xml` if URLs or content changed materially.
+
+### Pending SEO items
+
+- Add real social profile URLs beyond LinkedIn in JSON-LD `sameAs`.
+- Set `twitter:site` / `twitter:creator` handles if accounts exist.
+- Integrate a CMP/banner that calls `gtag('consent', 'update', ...)` for EEA visitors.
+
+---
+
+## Analytics (GA4)
+
+**Property ID:** `G-3GGD52GQ13`
+
+### Consent Mode v2 (EEA default: denied)
+
+```js
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  analytics_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500,
+  region: ['AT','BE','BG', /* ... EU/EEA countries ... */]
+});
 ```
 
-## Pug Layout
+### Custom events (`public/site.js`)
 
-```text
-src/pug/
-├── config/
-│   ├── template.pug
-│   └── _branding.pug
-├── mixins/
-│   ├── logo.pug
-│   └── theme-toggle.pug
-├── modulos/
-└── pages/
-    └── index.pug
+| Event | Trigger |
+|-------|---------|
+| `navigation_click` | Header / mobile nav links |
+| `generate_lead` | WhatsApp, email, phone CTA clicks |
+| `select_content` | Portfolio card clicks |
+| `view_section` | Section visibility via `IntersectionObserver` |
+
+Base params on all events: `page_lang`, `page_path`.
+
+---
+
+## Backend API
+
+### `POST /api/track_contact.php`
+
+Records CTA click events (WhatsApp, email, phone links).
+
+**Payload fields:** `lead_type`, `cta_text`, `link_url`, `page_lang`, `page_path`, `referrer_url`
+
+**Table:** `contact_click_events`
+
+### `POST /api/submit_lead.php`
+
+Records lead form submissions from modals.
+
+**Payload fields:** `lead_type`, `full_name`, `service_interest`, `whatsapp_number` / `phone` / `email`, `message`, `page_lang`, `page_path`
+
+**Table:** `lead_submissions`
+
+### Database tables
+
+```sql
+contact_click_events  -- id, lead_type, cta_text, link_url, page_lang, page_path,
+                      -- referrer_url, user_agent, ip_address, created_at
+
+lead_submissions      -- id, lead_type, full_name, service_interest, whatsapp_number,
+                      -- phone, email, message, page_lang, page_path,
+                      -- ip_address, user_agent, created_at
 ```
 
-Global variables (WhatsApp, email, current year) are defined in `index.pug` (`append config` block).
+`lead_type` accepts: `whatsapp`, `email`, `phone`.
 
-## NPM Scripts
+---
 
-```bash
-npm install
-npm run build:pug
-npm run deploy
-npm run deploy:full
-```
+## Environment & Database
 
-## Local Dev Environment (XAMPP)
-
-Expected local path:
-
-```bash
-/Applications/XAMPP/xamppfiles/htdocs/neurowebcr
-```
-
-### Local build
-
-```bash
-npm run build
-```
-
-Expected output:
-
-- `public/index.html`
-- `public/en/index.html`
-- `public/tailwind-dist.css`
-
-Notes:
-
-- Sass deprecation warnings and Node module-type warnings may appear.
-- Warnings do not block current build/deploy flow.
-
-### Local URLs
-
-- `http://localhost/neurowebcr` may show a directory listing depending on Apache config.
-- Landing URL: `http://localhost/neurowebcr/public/`
-- English: `http://localhost/neurowebcr/public/en/`
-
-### Environment variables (`.env`)
-
-Create local env file from the template:
+Copy the template and adjust for your environment:
 
 ```bash
 cp .env.example .env
 ```
-
-Default local values (XAMPP):
 
 ```dotenv
 DB_HOST=localhost
@@ -173,297 +309,113 @@ DB_NAME=neurowebcr
 DB_USER=root
 DB_PASSWORD=
 DB_CHARSET=utf8mb4
+APP_TIMEZONE=America/Costa_Rica
+DB_TIMEZONE_OFFSET=-06:00
 ```
 
-## MySQL Tracking and Migrations
-
-WhatsApp and email contact CTAs are tracked into MySQL through:
-
-```text
-public/api/track_contact.php
-```
-
-### Mandatory DB workflow
-
-1. Create SQL migrations under `scripts/migrations/`.
-2. Do not edit already executed production migrations.
-3. Apply with:
+### Apply migrations
 
 ```bash
 php scripts/run_migrations.php
 ```
 
-Current migration for contact events:
+Rules:
+
+1. Create new `.sql` files under `scripts/migrations/` with format `YYYYMMDD_NNN_description.sql`.
+2. Never modify migrations already applied in production.
+3. For corrections, add a new migration — do not rewrite history.
+
+### Local development (XAMPP)
+
+Expected project path:
 
 ```text
-20260521_001_create_contact_click_events.sql
+/Applications/XAMPP/xamppfiles/htdocs/neurowebcr
 ```
 
-### Local DB defaults (XAMPP)
+Local URLs:
 
-- Host fallback: `localhost` -> `127.0.0.1`
-- Database: `neurowebcr`
-- User: `root`
-- Password: empty
-- Source of truth: `.env` (see `.env.example`)
+- Spanish: `http://localhost/neurowebcr/public/`
+- English: `http://localhost/neurowebcr/public/en/`
 
-### Production DB config
+Local DB defaults: host `localhost` (fallback `127.0.0.1`), database `neurowebcr`, user `root`, empty password.
 
-Production credentials can differ from local. Set the same keys in production environment/config:
-
-- `DB_HOST`
-- `DB_HOST_FALLBACK` (optional)
-- `DB_PORT`
-- `DB_NAME`
-- `DB_USER`
-- `DB_PASSWORD`
-- `DB_CHARSET`
-
-### Mandatory verification after deploy (avoid silent failures)
-
-1. Confirm new assets are served with version param:
-
-```bash
-curl -s https://neurowebcr.com/ | grep -E "site.js\\?v=|tailwind-dist.css\\?v="
-```
-
-2. Confirm logs directory is writable by web server:
-
-```bash
-cd /home/ovalhost/neurowebcr
-mkdir -p logs
-chown -R ovalhost:nobody logs
-chmod -R 775 logs
-```
-
-3. Validate tracking endpoint directly:
-
-```bash
-curl -i -X POST "https://neurowebcr.com/public/api/track_contact.php" \
-  -H "Content-Type: application/json" \
-  -d '{"lead_type":"whatsapp","cta_text":"deploy_test","link_url":"https://wa.me/50670118183","page_lang":"es","page_path":"/"}'
-```
-
-4. Validate database writes:
-
-```sql
-SELECT id, lead_type, cta_text, page_path, created_at
-FROM contact_click_events
-ORDER BY id DESC
-LIMIT 20;
-```
-
-5. If something fails, inspect logs:
-
-```bash
-tail -n 100 /home/ovalhost/neurowebcr/logs/track_contact_requests.log
-tail -n 100 /home/ovalhost/neurowebcr/logs/mysql_errors.log
-tail -n 100 /home/ovalhost/neurowebcr/logs/migrations.log
-```
+---
 
 ## Production Deploy (cPanel / Apache)
 
-Use generated assets from `public/` for `https://neurowebcr.com/`.
-
-1. Build locally:
-
-```bash
-npm install
-npm run build
-```
-
-2. In cPanel File Manager, open domain docroot (`public_html` or mapped docroot).
-3. Upload **contents of `public/`** to docroot (not the `public` folder itself).
-4. Verify presence of: `index.html`, `en/`, `tailwind-dist.css`, `site.js`, `images/`.
-5. Test:
-   - `https://neurowebcr.com/`
-   - `https://neurowebcr.com/en/`
-
-### Canonical host and protocol (Search Console)
-
-`public/.htaccess` applies dynamic `301` behavior:
-
-- force HTTPS on current host
-- normalize host by removing `www.`
-- no hardcoded domain
-
-Local bypass:
-
-- redirects are disabled on `localhost` and `127.0.0.1`
-
-### Shared Hosting Note
-
-If server runtime is incompatible (for example Tailwind 4 build requirements), do not build on server. Build locally, then upload artifacts.
-
-### Production Troubleshooting
-
-1. If homepage is up but images return `404`, confirm docroot mapping first.
-2. If docroot is correct, validate file and directory permissions:
+1. Ensure `.env` exists on the server with production credentials.
+2. Run migrations on the server: `php scripts/run_migrations.php`
+3. Upload **contents of `public/`** to the domain docroot (not the `public` folder itself).
+4. Ensure `logs/` exists and is writable by the web server:
 
 ```bash
-cd /home/ovalhost/neurowebcr/public
-find . -type d -exec chmod 755 {} \;
-find . -type f -exec chmod 644 {} \;
+mkdir -p logs
+chown -R <web-user>:<web-group> logs
+chmod -R 775 logs
 ```
 
-3. Validate with:
+5. Verify:
+   - https://neurowebcr.com/
+   - https://neurowebcr.com/en/
+   - https://neurowebcr.com/sitemap.xml
+   - https://neurowebcr.com/robots.txt
+
+### Post-deploy verification
 
 ```bash
-curl -I https://neurowebcr.com/images/ico.png
-curl -I https://neurowebcr.com/images/logo_w_v.png
-curl -I https://neurowebcr.com/images/pf/mb.png
+# Assets served
+curl -s https://neurowebcr.com/ | grep -E "styles.css\\?v=|site.js"
+
+# Tracking endpoint
+curl -i -X POST "https://neurowebcr.com/api/track_contact.php" \
+  -H "Content-Type: application/json" \
+  -d '{"lead_type":"whatsapp","cta_text":"deploy_test","link_url":"https://wa.me/50670118183","page_lang":"es","page_path":"/"}'
+
+# DB writes
+# SELECT id, lead_type, cta_text, page_path, created_at
+# FROM contact_click_events ORDER BY id DESC LIMIT 20;
+
+# Logs on failure
+# tail -n 100 logs/track_contact_requests.log
+# tail -n 100 logs/mysql_errors.log
 ```
 
-## GitHub Pages (Prepros deploy flow)
+Build on the server is **not required** — compile CSS locally if needed, then upload artifacts.
 
-Deploy publishes the `public/` directory output.
+---
 
-### Pre-deploy checklist
+## Sensitive Files (handle with care)
 
-1. Prepros completed Sass + Tailwind + Pug without errors.
-2. Updated outputs exist:
-   - `public/index.html`
-   - `public/tailwind-dist.css`
-   - `public/site.js`
-   - `public/images/`
-   - `public/en/index.html`
-3. Repository visibility and Pages settings are valid.
+| File | Risk |
+|------|------|
+| `public/index.html`, `public/en/index.html` | SEO, content, tracking markup |
+| `public/site.js` | Analytics, lead capture, theme, API calls |
+| `public/styles.css` | Global layout and theme |
+| `public/.htaccess` | Redirects, caching |
+| `public/api/db.php` | Database credentials path |
+| `public/api/track_contact.php`, `public/api/submit_lead.php` | Lead data pipeline |
+| `scripts/run_migrations.php` | Schema state |
+| `public/robots.txt`, `public/sitemap.xml` | Indexation |
 
-Deploy:
+See `CHANGE_GUARDRAILS.md` for verification checklists before closing tasks that touch these files.
 
-```bash
-npm run deploy
-```
+---
 
-Example URLs:
+## Git Workflow (production)
 
-- `https://<your-user>.github.io/neurowebcr/`
-- `https://<your-user>.github.io/neurowebcr/en/`
+If production servers run `git pull` from `main`:
 
-## Recommended Git Practice (production)
+- Work in feature branches; merge to `main` without rewriting published history.
+- Avoid `rebase` + `force push` on `main` after deployment.
 
-If production servers run `git pull` from `main`, avoid rewriting published `main` history (`rebase` + `push --force`).
+---
 
-Recommended:
+## Related Documentation
 
-1. Work in feature/fix branches.
-2. Merge to `main` without rewriting published history.
-3. Perform history cleanup only before publication or on non-production branches.
-
-## SEO Technical Status
-
-### Implemented
-
-- Core metadata:
-  - `title`
-  - `meta description`
-  - `meta robots="index,follow,max-image-preview:large"`
-- International SEO:
-  - absolute canonical URLs per language
-  - hreflang: `es`, `en`, `x-default`
-- Social metadata:
-  - Open Graph (`og:title`, `og:site_name`, `og:description`, `og:type`, `og:url`, `og:image`, `og:locale`, `og:locale:alternate`)
-  - Twitter (`twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`)
-- Analytics:
-  - GA4 (`G-3GGD52GQ13`)
-  - Consent Mode v2 default setup for EEA
-  - funnel tracking in `public/site.js`
-- Structured data (JSON-LD):
-  - `Organization`
-  - `ProfessionalService`
-  - `ContactPoint`
-  - `WebSite`
-  - `WebPage`
-  - `Service` entries per service block
-- Indexation artifacts:
-  - `public/robots.txt`
-  - `public/sitemap.xml` with ES/EN/x-default
-
-### Key SEO files
-
-- `src/pug/config/template.pug`
-- `scripts/compile-pug.js`
-- `scripts/generate-seo-files.js`
-- `package.json` (`build`, `build:seo`)
-
-### SEO build command
-
-```bash
-npm run build
-```
-
-Execution pipeline:
-
-1. CSS build
-2. Pug compile (ES/EN)
-3. robots/sitemap generation
-
-### Canonical domain source (`SITE_URL`)
-
-Resolution order:
-
-1. `SITE_URL` environment variable
-2. `homepage` in `package.json`
-3. fallback `https://neurowebcr.com`
-
-Example:
-
-```bash
-SITE_URL="https://neurowebcr.com" npm run build
-```
-
-### SEO pending items
-
-1. Set real social profile URLs for `sameAs`.
-2. Set real `twitter:site` and `twitter:creator` handles in locale files.
-3. Optimize images for Core Web Vitals.
-4. Integrate CMP/banner with runtime `gtag('consent', 'update', ...)`.
-
-### Consent Mode v2
-
-Default state in EEA:
-
-- `ad_storage: denied`
-- `analytics_storage: denied`
-- `ad_user_data: denied`
-- `ad_personalization: denied`
-
-Grant example:
-
-```js
-gtag('consent', 'update', {
-  ad_storage: 'granted',
-  analytics_storage: 'granted',
-  ad_user_data: 'granted',
-  ad_personalization: 'granted'
-});
-```
-
-### Local validation commands
-
-```bash
-rg -n "canonical|hreflang|og:|twitter:|application/ld\\+json|meta name=\"robots\"" public/index.html public/en/index.html
-cat public/robots.txt
-cat public/sitemap.xml
-```
-
-### Funnel events (GA4)
-
-Implemented in `public/site.js`:
-
-- `navigation_click`
-- `generate_lead` (WhatsApp and email actions)
-- `select_content` (portfolio item clicks)
-- `view_section` (section visibility via IntersectionObserver)
-
-Base parameters:
-
-- `page_lang`
-- `page_path`
-
-Additional parameters by event:
-
-- `link_text`, `link_target`
-- `lead_type`, `cta_text`, `link_url`
-- `content_type`, `item_name`, `item_category`
-- `section_id`
+| File | Purpose |
+|------|---------|
+| `CHANGE_GUARDRAILS.md` | Checklists for template, tracking, API, SEO changes |
+| `AI_ENVIRONMENT_CONTEXT.md` | Local XAMPP vs production rules for AI agents |
+| `AI_DATABASE_INSTRUCTIONS.md` | Migration conventions for AI agents |
+| `CHANGELOG.md` | Release history |
