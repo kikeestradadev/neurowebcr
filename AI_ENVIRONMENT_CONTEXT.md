@@ -44,14 +44,13 @@ Cuando una tarea toque base de datos:
 
 ## Regla anti-regresión (tracking frontend + API)
 Cuando se cambie cualquier lógica de tracking frontend o endpoints bajo `public/api/`:
-1. Verificar que `public/index.html` y `public/en/index.html` reflejen cambios de assets versionados (`site.js?v=...`).
+1. Verificar que las 4 páginas (`public/index.html`, `public/servicios.html`, `public/en/index.html`, `public/en/servicios.html`) reflejen cambios de assets versionados (`site.js?v=...`).
 2. Confirmar que el endpoint acepte `POST` real con `curl`.
 3. Confirmar escritura en DB (`SELECT` de últimos registros).
 4. Confirmar permisos de `logs/` y revisar trazas (`track_contact_requests.log`, `mysql_errors.log`).
 5. No cerrar la tarea hasta tener evidencia de estos 4 puntos en el reporte.
 
-## Regla de plantillas y build (Prepros/Pug)
-- La fuente real es `src/`; `public/` es salida compilada.
-- No resolver cambios funcionales editando HTML generado en `public/` de forma manual.
-- Si se toca template/tracking/assets, recompilar y validar `public/index.html` + `public/en/index.html`.
-- Confirmar que el HTML final tenga assets versionados (`site.js?v=...`, `tailwind-dist.css?v=...`) antes de cerrar la tarea.
+## Regla de plantillas
+- No hay motor de plantillas ni build. `public/` es la fuente de verdad directa: se edita el HTML a mano.
+- Si se toca contenido/CTAs, actualizar las 4 páginas HTML por igual.
+- Confirmar que el HTML final tenga assets versionados (`site.js?v=...`, `styles.css?v=...`) antes de cerrar la tarea.
